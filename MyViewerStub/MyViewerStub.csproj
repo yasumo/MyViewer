@@ -68,6 +68,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="settings\MyViewer.sqlite">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="settings\settings.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -15,7 +15,7 @@ namespace MyViewerStub
     {
         static void Main(string[] args)
         {
-            //sqltest();
+            sqltest();
             //foldertest();
             initest();
             Console.ReadLine(); // Enterキー押下でコマンドプロンプトが閉じる
@@ -45,7 +45,7 @@ namespace MyViewerStub
         {
             SQLiteConnectionStringBuilder aConnectionString = new SQLiteConnectionStringBuilder
             {
-                DataSource = @"E:\WindowsWorkFiles\Documents\visual studio 2017\Projects\MyViewer\res\LinqTest.sqlite" // データベースの保存先
+                DataSource = @".\settings\MyViewer.sqlite" // データベースの保存先
             };
             using (SQLiteConnection aConnection = new SQLiteConnection(aConnectionString.ToString()))
             {
@@ -55,18 +55,60 @@ namespace MyViewerStub
                 // ここにデータベース処理コードを書く
                 using (DataContext aContext = new DataContext(aConnection))
                 {
-                    Table<TTestData> aTableTest = aContext.GetTable<TTestData>();
-                    IQueryable<TTestData> aQueryResult =
-                        from x in aTableTest
+                    //Tag
+                    Table<Tag> rec = aContext.GetTable<Tag>();
+                    IQueryable<Tag> res =
+                        from x in rec
                         select x;
 
-                    Console.WriteLine("=== test ===");
-                    foreach (TTestData aData in aQueryResult)
+                    Console.WriteLine("=== Tag ===");
+                    foreach (Tag data in res)
                     {
-                        Console.WriteLine("=== {0} ===", aData.Id);
-                        Console.WriteLine(aData.Title);
-                        Console.WriteLine(aData.Detail);
+                        Console.WriteLine("=== {0} ===", data.TagId);
+                        Console.WriteLine(data.TagName);
                     }
+
+                    //Folder
+                    Table<Folder> recf = aContext.GetTable<Folder>();
+                    IQueryable<Folder> resf =
+                        from x in recf
+                        select x;
+
+                    Console.WriteLine("=== Folder ===");
+                    foreach (Folder data in resf)
+                    {
+                        Console.WriteLine("=== {0} ===", data.FolderId);
+                        Console.WriteLine(data.FolderPath);
+                    }
+
+                    //FolderTag
+                    Table<FolderTag> recft = aContext.GetTable<FolderTag>();
+                    IQueryable<FolderTag> resft =
+                        from x in recft
+                        select x;
+
+                    Console.WriteLine("=== FolderTag ===");
+                    foreach (FolderTag data in resft)
+                    {
+                        Console.WriteLine("=== {0} ===", data.FolderTagId);
+                        Console.WriteLine(data.TagId);
+                        Console.WriteLine(data.FolderId);
+                    }
+
+                    //Thumbnail
+                    Table<Thumbnail> rectn = aContext.GetTable<Thumbnail>();
+                    IQueryable<Thumbnail> restn =
+                        from x in rectn
+                        select x;
+
+                    Console.WriteLine("=== Thumbnail ===");
+                    foreach (Thumbnail data in restn)
+                    {
+                        Console.WriteLine("=== {0} ===", data.FilePathMD5);
+                        Console.WriteLine(data.CreateTime);
+                    }
+
+
 
                 }
                 // データベースを閉じる

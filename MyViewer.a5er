@@ -1,0 +1,152 @@
+﻿# A5:ER FORMAT:11
+# A5:ER ENCODING:UTF8
+# A5:ER Mk-1 Copyright (C)2007 m.matsubara
+# A5:SQL Mk-2 Copyright (C)1997 m.matsubara
+#  http://www.wind.sannet.ne.jp/m_matsu/developer/a5m2/
+
+[Manager]
+ProjectName=MyViewer
+Author=
+MaxEntityRowShow=1000
+ReadOnlyRecommend=0
+Page=Main
+PageInfo="Main",2,"A3Landscape",$FFFFFF
+LogicalView=1
+DecodeDomain=0
+ViewModePageIndividually=1
+ViewMode=2
+ViewFormat=0
+UseNondependenceDashLine=0
+FontName=Tahoma
+FontSize=6
+PaperSize=A4Landscape
+HeaderLeft=
+HeaderCenter=
+HeaderRight=
+FooterLeft=
+FooterCenter=
+FooterRight=
+ShowPageoutRelation=1
+RDBMSType=5
+RDBMSTypeName=MySQL
+GenerateComment=0
+GenerateCommentStatement=0
+GenerateCommentStatement_LName=0
+GenerateCommentStatement_Comment=0
+DefaultPkName=%0:s_PKC
+DefaultPkIndexName=%0:s_PKI
+DefaultIndexName=%0:s_IX%1:d
+DefaultFkName=%0:s_FK%1:d
+SqlSeparator=0
+ShowTag=1
+ShowCommonAttributes=0
+
+[Entity]
+PName=THUMBNAIL
+LName=THUMBNAIL
+Comment=
+TableOption=
+Page=Main
+Left=550
+Top=300
+Field="FILE_PATH_MD5","FILE_PATH_MD5","TEXT","NOT NULL",,"","",$FFFFFFFF,""
+Field="CREATE_TIME","CREATE_TIME","DATETIME","NOT NULL",,"","",$FFFFFFFF,""
+Index=FILE_PATH_MD5_INDEX=1,FILE_PATH_MD5
+Index=FILE_PATH_MD5_UNIQUE=2,FILE_PATH_MD5
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20171020222241
+Position="Main",550,300
+
+[Relation]
+Entity1=TAG
+Entity2=FOLDER_TAG
+RelationType1=1
+RelationType2=3
+Fields1=TAG_ID
+Fields2=TAG_ID
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,4850,8306,7946,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=485
+Bar2=831
+Bar3=795
+TermPos1=R
+TermPos2=R
+
+[Relation]
+Entity1=FOLDER
+Entity2=FOLDER_TAG
+RelationType1=1
+RelationType2=3
+Fields1=FOLDER_ID
+Fields2=FOLDER_ID
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,7187,8306,2668,R,R
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=719
+Bar2=831
+Bar3=267
+TermPos1=R
+TermPos2=R
+
+[Entity]
+PName=TAG
+LName=TAG
+Comment=
+TableOption=
+Page=MAIN
+Left=1100
+Top=650
+Field="TAG_ID","TAG_ID","INTEGER","NOT NULL",,"","",$FFFFFFFF,"PRIMARY KEY AUTOINCREMENT"
+Field="TAG_NAME","TAG_NAME","TEXT","NOT NULL",,"","",$FFFFFFFF,""
+Index=TAG_INDEX=1,TAG_NAME
+Index=TAG_UNIQUE=2,TAG_NAME
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20171020221329
+Position="MAIN",1100,650
+
+[Entity]
+PName=FOLDER_TAG
+LName=FOLDER_TAG
+Comment=
+TableOption=
+Page=MAIN
+Left=900
+Top=300
+Field="FOLDER_TAG_ID","FOLDER_TAG_ID","INTEGER","NOT NULL",,"","",$FFFFFFFF,"PRIMARY KEY AUTOINCREMENT"
+Field="FOLDER_ID","FOLDER_ID","BIGINT","NOT NULL",,"","",$FFFFFFFF,""
+Field="TAG_ID","TAG_ID","BIGINT","NOT NULL",,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20171020221442
+Position="MAIN",900,300
+
+[Entity]
+PName=FOLDER
+LName=FOLDER
+Comment=
+TableOption=
+Page=MAIN
+Left=600
+Top=600
+Field="FOLDER_ID","FOLDER_ID","INTEGER","NOT NULL",,"","",$FFFFFFFF,"PRIMARY KEY AUTOINCREMENT"
+Field="FOLDER_PATH","FOLDER_PATH","TEXT","NOT NULL",,"","",$FFFFFFFF,""
+Field="INSIDE_FILE_NUM","INSIDE_FILE_NUM","BIGINT","NOT NULL",,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20171020221537
+Position="MAIN",600,600,217,106
