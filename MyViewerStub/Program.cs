@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.Linq;
 using System.Data.SQLite;
 using MyViewerLib.LinqTest;
-using MyViewerLib;
-using System.Data.Linq.Mapping;
 
 namespace MyViewerStub
 {
@@ -17,29 +13,10 @@ namespace MyViewerStub
         {
             sqltest();
             //foldertest();
-            initest();
             Console.ReadLine(); // Enterキー押下でコマンドプロンプトが閉じる
 
         }
 
-        static void initest()
-        {
-            Kernel32 hoge = new Kernel32();
-            Console.WriteLine(hoge.GetIniValue(@".\settings\settings.ini", "settings", "PictureDirectory"));
-        }
-
-        static void foldertest()
-        {
-            System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(@"E:\data\dropbox\Dropbox\pic");
-            IEnumerable<System.IO.DirectoryInfo> subFolders =
-                di.EnumerateDirectories("*", System.IO.SearchOption.AllDirectories);
-
-            //サブフォルダを列挙する
-            foreach (System.IO.DirectoryInfo subFolder in subFolders)
-            {
-                Console.WriteLine(subFolder.FullName);
-            }
-        }
 
         static void sqltest()
         {
