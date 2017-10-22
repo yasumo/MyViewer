@@ -67,7 +67,7 @@ namespace MyViewerLib
 
         // InsideFileNum
         [Column(Name = "INSIDE_FILE_NUM", DbType = "INT", CanBeNull = false)]
-        public Int64 InsideFileNum { get; set; }
+        public Int64? InsideFileNum { get; set; }
 
     }
 

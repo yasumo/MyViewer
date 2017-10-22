@@ -47,7 +47,7 @@ namespace MyVierLibTest
                 count++;
             }
 
-            Assert.AreEqual(7, count);
+            Assert.AreEqual(8, count);
         }
         [TestMethod]
         public void SqlTest()
@@ -55,13 +55,59 @@ namespace MyVierLibTest
 
             var dao = new Dao(getSqliteFilePath());
             var res = dao.GetAllTableEntity();
-            foreach (Tag data in res)
-            {
-                Assert.AreEqual(0, data.TagId);
-                Assert.AreEqual(@"hoge", data.TagName);
-            }
+            Assert.AreEqual(0, res[0].TagId);
+            Assert.AreEqual(@"hoge", res[0].TagName);
 
         }
 
+        [TestMethod]
+        public void SearchFolderIdListFromTagNameTest()
+        {
+            var dao = new Dao(getSqliteFilePath());
+            var ret = dao.GetHavingTagFolderIdList(@"あああ");
+            Assert.AreEqual(2, ret.Count);
+            Assert.AreEqual(0, ret[0]);
+            Assert.AreEqual(4, ret[1]);
+
+
+            var ret2 = dao.GetHavingTagFolderIdList(@"hoge");
+            Assert.AreEqual(1, ret2.Count);
+            Assert.AreEqual(0, ret2[0]);
+
+            var ret3 = dao.GetHavingTagFolderIdList(@"99999999");
+            Assert.AreEqual(0, ret3.Count);
+
+            var ret4 = dao.GetHavingTagFolderIdList(@"仮名");
+            Assert.AreEqual(0, ret4.Count);
+        }
+
+        [TestMethod]
+        public void SearchFolderPathFromFolderId()
+        {
+            var dao = new Dao(getSqliteFilePath());
+            var ret = dao.GetFolderPath(4);
+            Assert.AreEqual(@"E:\[bbb][あああ]\[settings]\[aaa][fdsa]", ret);
+
+            var ret2 = dao.GetFolderPath(5);
+            Assert.AreEqual(@"", ret2);
+
+            var ret3 = dao.GetFolderPath(1);
+            Assert.AreEqual(@"E:\[aaa]\[bbb]", ret3);
+
+        }
+        [TestMethod]
+        public void CountInsideFileNum()
+        {
+            var dao = new Dao(getSqliteFilePath());
+            var ret = dao.GetSumOfFileNum(new List<Int64> { 0, 1, 2 });
+            Assert.AreEqual(40, ret);
+
+            var ret2 = dao.GetSumOfFileNum(new List<Int64> { 999, 9999 });
+            Assert.AreEqual(0, ret2);
+
+            var ret3 = dao.GetSumOfFileNum(new List<Int64> { 0,0,1 });
+            Assert.AreEqual(30, ret3);
+
+        }
     }
 }

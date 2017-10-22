@@ -93,6 +93,9 @@
     <Content Include="test\[あああ]\[ccc]\[あああ]\キャプチャ.PNG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="test\[あああ]\[ddd]\aaa\キャプチャ.PNG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="test\[あああ]\[ddd]\キャプチャ.PNG">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
