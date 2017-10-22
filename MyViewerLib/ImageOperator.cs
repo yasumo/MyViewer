@@ -9,7 +9,7 @@ namespace MyViewerLib
 {
     public class ImageOperator
     {
-        public Bitmap GetThumbnail()
+        public Bitmap GetThumbnail(Bitmap targetImg)
         {
             
             Bitmap img = new Bitmap(200, 100);

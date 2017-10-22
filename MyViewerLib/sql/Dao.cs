@@ -44,7 +44,6 @@ namespace MyViewerLib
 
                     ret = new List<Tag>(res);
                 }
-                
                 // データベースを閉じる
                 c.Close();
             }
@@ -68,10 +67,10 @@ namespace MyViewerLib
                     Table<Folder> rec = dc.GetTable<Folder>();
                     ret = (from x in rec
                            where folderIdList.Contains(x.FolderId)
-                        select x.InsideFileNum).Sum();
-                    
+                           select x.InsideFileNum).Sum();
+
                 }
-                
+
                 // データベースを閉じる
                 c.Close();
             }
@@ -93,11 +92,11 @@ namespace MyViewerLib
                 {
                     //Folder
                     Table<Folder> rec = dc.GetTable<Folder>();
-                    var res =(
+                    var res = (
                         from x in rec
                         where x.FolderId == folderId
                         select x).SingleOrDefault();
-                    if(res != null)
+                    if (res != null)
                     {
                         ret = res.FolderPath;
                     }
@@ -109,7 +108,7 @@ namespace MyViewerLib
             return ret;
         }
 
-        public List<Int64> GetHavingTagFolderIdList(string tagName)
+        public List<(string tagName, int tagNum)> GetOtherTagNum(List<string> tagNameList)
         {
             var cs = createConnectionString();
             List<Int64> ret = new List<Int64>();
@@ -124,16 +123,71 @@ namespace MyViewerLib
                     Table<Tag> tagTable = dc.GetTable<Tag>();
                     Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
                     var res =
-                        from t in tagTable.Where(x=>x.TagName==tagName)
-                        from ft in folderTagTable.Where(x => x.TagId == t.TagId)
+                        from ft in folderTagTable.Where(x => x.TagId == x.TagId)
                         select new
                         {
                             ft.FolderId,
                         };
-                    foreach (var x in res)
+                }
+                // データベースを閉じる
+                c.Close();
+            }
+
+            return null;
+        }
+
+        public List<Int64> GetFolderIdListHaving(List<string>tagNameList)
+        {
+            List<Int64> ret = null;
+            foreach(var tagName in tagNameList)
+            {
+                ret = GetFolderIdListHaving(tagName, ret);
+            }
+            return ret;
+        }
+
+        public List<Int64> GetFolderIdListHaving(string tagName, List<Int64> folderIdList)
+        {
+            var cs = createConnectionString();
+            List<Int64> ret = new List<Int64>();
+            using (SQLiteConnection c = new SQLiteConnection(cs.ToString()))
+            {
+                // データベースを開く
+                c.Open();
+
+                // ここにデータベース処理コードを書く
+                using (DataContext dc = new DataContext(c))
+                {
+                    Table<Tag> tagTable = dc.GetTable<Tag>();
+                    Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
+
+                    if (folderIdList == null || folderIdList.Count==0)
                     {
-                        ret.Add(x.FolderId);
+                        var res = from t in tagTable.Where(x => x.TagName == tagName)
+                                  from ft in folderTagTable.Where(x => x.TagId == t.TagId)
+                                  select new
+                                  {
+                                      ft.FolderId,
+                                  };
+                        foreach (var x in res)
+                        {
+                            ret.Add(x.FolderId);
+                        }
                     }
+                    else
+                    {
+                        var res = from t in tagTable.Where(x => x.TagName == tagName)
+                                  from ft in folderTagTable.Where(x => x.TagId == t.TagId && folderIdList.Contains(x.FolderId))
+                                  select new
+                                  {
+                                      ft.FolderId,
+                                  };
+                        foreach (var x in res)
+                        {
+                            ret.Add(x.FolderId);
+                        }
+                    }
+
                 }
                 // データベースを閉じる
                 c.Close();
@@ -141,69 +195,7 @@ namespace MyViewerLib
             return ret;
         }
 
-
-        public void hogehoge()
-        {
-            SQLiteConnectionStringBuilder cs = new SQLiteConnectionStringBuilder
-            {
-                DataSource = @".\settings\MyViewer.sqlite" // データベースの保存先
-            };
-
-            using (SQLiteConnection c = new SQLiteConnection(cs.ToString()))
-            {
-                // データベースを開く
-                c.Open();
-                // ここにデータベース処理コードを書く
-                using (DataContext aContext = new DataContext(c))
-                {
-
-                    //Folder
-                    Table<Folder> recf = aContext.GetTable<Folder>();
-                    IQueryable<Folder> resf =
-                        from x in recf
-                        select x;
-
-                    Console.WriteLine("=== Folder ===");
-                    foreach (Folder data in resf)
-                    {
-                        Console.WriteLine("=== {0} ===", data.FolderId);
-                        Console.WriteLine(data.FolderPath);
-                    }
-
-                    //FolderTag
-                    Table<FolderTag> recft = aContext.GetTable<FolderTag>();
-                    IQueryable<FolderTag> resft =
-                        from x in recft
-                        select x;
-
-                    Console.WriteLine("=== FolderTag ===");
-                    foreach (FolderTag data in resft)
-                    {
-                        Console.WriteLine("=== {0} ===", data.FolderTagId);
-                        Console.WriteLine(data.TagId);
-                        Console.WriteLine(data.FolderId);
-                    }
-
-                    //Thumbnail
-                    Table<Thumbnail> rectn = aContext.GetTable<Thumbnail>();
-                    IQueryable<Thumbnail> restn =
-                        from x in rectn
-                        select x;
-
-                    Console.WriteLine("=== Thumbnail ===");
-                    foreach (Thumbnail data in restn)
-                    {
-                        Console.WriteLine("=== {0} ===", data.FilePathMD5);
-                        Console.WriteLine(data.CreateTime);
-                    }
-                }
-                // データベースを閉じる
-                c.Close();
-
-            }
-
-
-        }
+       
     }
 }
 
