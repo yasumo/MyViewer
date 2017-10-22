@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyViewerLib", "MyViewerLib\MyViewerLib.csproj", "{B58A8DD1-F645-4ACE-9767-C7C580CB939C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyViewerStub", "MyViewerStub\MyViewerStub.csproj", "{4379B0BD-2FB9-4E2D-8AA0-6363EAE0AA80}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyVierLibTest", "MyVierLibTest\MyVierLibTest.csproj", "{A45D747C-BA32-43BE-97A4-F0BB654F2DB2}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{B58A8DD1-F645-4ACE-9767-C7C580CB939C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B58A8DD1-F645-4ACE-9767-C7C580CB939C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B58A8DD1-F645-4ACE-9767-C7C580CB939C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4379B0BD-2FB9-4E2D-8AA0-6363EAE0AA80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4379B0BD-2FB9-4E2D-8AA0-6363EAE0AA80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4379B0BD-2FB9-4E2D-8AA0-6363EAE0AA80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4379B0BD-2FB9-4E2D-8AA0-6363EAE0AA80}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A45D747C-BA32-43BE-97A4-F0BB654F2DB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A45D747C-BA32-43BE-97A4-F0BB654F2DB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A45D747C-BA32-43BE-97A4-F0BB654F2DB2}.Release|Any CPU.ActiveCfg = Release|Any CPU

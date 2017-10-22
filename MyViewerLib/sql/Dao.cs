@@ -1,29 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.Linq;
 using System.Data.SQLite;
-using MyViewerLib;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MyViewerStub
+namespace MyViewerLib
 {
-    class Program
+    public class Dao
     {
-        static void Main(string[] args)
+        string datasourcePath;
+        public Dao(string datasourcePath)
         {
-            sqltest();
-            //foldertest();
-            Console.ReadLine(); // Enterキー押下でコマンドプロンプトが閉じる
+            this.datasourcePath = datasourcePath;
+        }
+
+        private SQLiteConnectionStringBuilder createConnectionString()
+        {
+            return new SQLiteConnectionStringBuilder
+            {
+                DataSource = datasourcePath
+            };
 
         }
 
-
-        static void sqltest()
+        public List<Tag> GetAllTableEntity()
         {
-            SQLiteConnectionStringBuilder aConnectionString = new SQLiteConnectionStringBuilder
-            {
-                DataSource = @".\settings\MyViewer.sqlite" // データベースの保存先
-            };
+            var aConnectionString = createConnectionString();
+            List<Tag> ret;
             using (SQLiteConnection aConnection = new SQLiteConnection(aConnectionString.ToString()))
             {
                 // データベースを開く
@@ -34,16 +39,34 @@ namespace MyViewerStub
                 {
                     //Tag
                     Table<Tag> rec = aContext.GetTable<Tag>();
-                    IQueryable<Tag> res =
+                    var res =
                         from x in rec
                         select x;
 
-                    Console.WriteLine("=== Tag ===");
-                    foreach (Tag data in res)
-                    {
-                        Console.WriteLine("=== {0} ===", data.TagId);
-                        Console.WriteLine(data.TagName);
-                    }
+                    ret = new List<Tag>(res);
+
+
+                }
+                // データベースを閉じる
+                aConnection.Close();
+            }
+            return ret;
+
+        }
+        public void hogehoge()
+        {
+            SQLiteConnectionStringBuilder aConnectionString = new SQLiteConnectionStringBuilder
+            {
+                DataSource = @".\settings\MyViewer.sqlite" // データベースの保存先
+            };
+
+            using (SQLiteConnection aConnection = new SQLiteConnection(aConnectionString.ToString()))
+            {
+                // データベースを開く
+                aConnection.Open();
+                // ここにデータベース処理コードを書く
+                using (DataContext aContext = new DataContext(aConnection))
+                {
 
                     //Folder
                     Table<Folder> recf = aContext.GetTable<Folder>();
@@ -84,16 +107,14 @@ namespace MyViewerStub
                         Console.WriteLine("=== {0} ===", data.FilePathMD5);
                         Console.WriteLine(data.CreateTime);
                     }
-
-
-
                 }
                 // データベースを閉じる
                 aConnection.Close();
 
-
-
             }
+
+
         }
     }
 }
+

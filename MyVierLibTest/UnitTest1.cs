@@ -17,6 +17,14 @@ namespace MyVierLibTest
             var targetDir = kernel.GetIniValue(iniPath, "settings", "PictureDirectory");
             return targetDir;
         }
+
+        private string getSqliteFilePath()
+        {
+            Kernel32 kernel = new Kernel32();
+            var targetDir = kernel.GetIniValue(iniPath, "settings", "DBFilePath");
+            return targetDir;
+        }
+
         [TestMethod]
         public void IniFileReadTest()
         {
@@ -41,7 +49,19 @@ namespace MyVierLibTest
 
             Assert.AreEqual(7, count);
         }
+        [TestMethod]
+        public void SqlTest()
+        {
 
+            var dao = new Dao(getSqliteFilePath());
+            var res = dao.GetAllTableEntity();
+            foreach (Tag data in res)
+            {
+                Assert.AreEqual(0, data.TagId);
+                Assert.AreEqual(@"hoge", data.TagName);
+            }
+
+        }
 
     }
 }
