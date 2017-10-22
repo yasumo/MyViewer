@@ -19,6 +19,22 @@ namespace MyVierLibTest
             Assert.AreEqual(@"hoge", res[0].TagName);
 
         }
+        [TestMethod]
+        public void GetOtherTagNumTest()
+        {
+            var dao = new Dao(TestUtils.GetSqliteFilePath());
+            {
+                var ret = dao.GetOtherTagNum(new List<string> { @"あああ", @"uuu" });
+
+                Assert.AreEqual(5, ret.Count);
+                Assert.AreEqual(ret[0], (9, @"fda", 17));
+                Assert.AreEqual(ret[1], (0, @"hoge", 10));
+                Assert.AreEqual(ret[2], (2, @"いいい", 10));
+                Assert.AreEqual(ret[3], (7, @"あいうえお", 10));
+                Assert.AreEqual(ret[4], (10, @"csaf", 7));
+            }
+
+        }
 
         [TestMethod]
         public void SearchFolderIdListFromTagNameTest()
@@ -81,7 +97,7 @@ namespace MyVierLibTest
             var dao = new Dao(TestUtils.GetSqliteFilePath());
             {
                 var ret = dao.GetSumOfFileNum(new List<Int64> { 0, 1, 2 });
-                Assert.AreEqual(40, ret);
+                Assert.AreEqual(38, ret);
             }
             {
                 var ret = dao.GetSumOfFileNum(new List<Int64> { 999, 9999 });
@@ -89,7 +105,7 @@ namespace MyVierLibTest
             }
             {
                 var ret = dao.GetSumOfFileNum(new List<Int64> { 0, 0, 1 });
-                Assert.AreEqual(30, ret);
+                Assert.AreEqual(31, ret);
             }
         }
     }
