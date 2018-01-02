@@ -8,6 +8,7 @@ namespace MyViewerLib
 {
     public class FolderOperator
     {
+        //フォルダパスからタグリストを取得するメソッド
         public List<string> GetTagList(string folderPath)
         {
             var ret = new List<string>();
@@ -23,7 +24,7 @@ namespace MyViewerLib
         }
 
 
-        //TODO
+        //TODO:一階層分のファイルをすべて取得するメソッド
         public List<string> GetAllFilePathList(List<string> folderList, List<string> ext)
         {
             var ret = new List<string>();
@@ -31,13 +32,14 @@ namespace MyViewerLib
             return ret;
         }
 
-        //TODO
-        public List<string> GetTagFilePathList(List<string> folderList, List<string> ext)
+        //TODOベースパスからフォルダのリストをすべて取得するメソッド
+        public List<string> GetAllFolderPathList(string baseFolderPath)
         {
             var ret = new List<string>();
 
             return ret;
         }
+        //TODO
 
     }
 }

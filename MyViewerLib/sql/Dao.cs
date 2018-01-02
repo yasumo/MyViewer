@@ -25,6 +25,26 @@ namespace MyViewerLib
 
         }
 
+        //フォルダテーブルとフォルダタグテーブルを消す
+        public void ClearTmpTable()
+        {
+            var cs = createConnectionString();
+            List<Folder> ret;
+            using (SQLiteConnection c = new SQLiteConnection(cs.ToString()))
+            {
+                c.Open();
+                using (DataContext dc = new DataContext(c))
+                {
+                    //dc.ExecuteCommand("UPDATE Products SET QuantityPerUnit = {0} WHERE ProductID = {1}", "24 boxes", 5);
+                    dc.ExecuteCommand("DELETE from TAG");
+                    dc.ExecuteCommand("DELETE from FOLDER_TAG");
+                    dc.ExecuteCommand("DELETE from THUMBNAIL");
+                }
+
+                c.Close();
+            }
+        }
+
         //すべてのタグを取得
         public List<Tag> GetAllTag()
         {

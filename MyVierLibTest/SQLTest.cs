@@ -9,6 +9,16 @@ namespace MyVierLibTest
     [TestClass]
     public class SQLTest
     {
+
+        [TestMethod]
+        public void ClearTmpTableTest() {
+            var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
+            dao.ClearTmpTable();
+            var res = dao.GetAllTag();
+            Assert.AreEqual(0, res.Count);
+        }
+
+
         [TestMethod]
         public void SqlTest()
         {
