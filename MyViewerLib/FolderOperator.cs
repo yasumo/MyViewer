@@ -75,8 +75,8 @@ namespace MyViewerLib
         }
 
 
-        //TODOベースパスのフォルダを全部消すメソッド
-        private void DeleteAllFiles(string targetFolderPath)
+        //TODO:フォルダにあるファイルを消す
+        private void DeleteFile(string targetFolderPath,string fileName)
         {
 
         }

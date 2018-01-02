@@ -46,16 +46,16 @@ namespace MyViewerLib
         }
 
         //テーブルの最大値の次の値を取る
-        public int GetNextId( string tableName, string id)
+        public long GetNextId( string tableName, string idName)
         {
             var cs = createConnectionString();
-            int nextId = 0;
+            long nextId = 0;
             using (SQLiteConnection c = new SQLiteConnection(cs.ToString()))
             {
                 c.Open();
                 using (DataContext dc = new DataContext(c))
                 {
-                    int? max = dc.ExecuteQuery<int?>(@"select max ("+id+") from "+tableName ).First();
+                    long? max = dc.ExecuteQuery<long?>(@"select max ("+idName+") from "+tableName ).FirstOrDefault();
                     nextId = max.GetValueOrDefault(0) + 1;
                 }
 
@@ -65,7 +65,76 @@ namespace MyViewerLib
             return nextId;
         }
 
-        //TODO:インサートを作成する
+        //各種インサート
+        public void MyExecuteCommand(string sql) {
+            var cs = createConnectionString();
+            using (SQLiteConnection c = new SQLiteConnection(cs.ToString()))
+            {
+                c.Open();
+                using (DataContext dc = new DataContext(c))
+                {
+                    dc.ExecuteCommand(sql);
+                }
+
+                c.Close();
+            }
+
+        }
+        public long InsertFolderTable(string folderPath, long insideFileNum)
+        {
+            var id = GetNextId("FOLDER", "FOLDER_ID");
+            var sql = "INSERT INTO FOLDER VALUES(" + id.ToString() + ",\"" + folderPath + "\"," + insideFileNum.ToString() + ")";
+            MyExecuteCommand(sql);
+            return id;
+        }
+        public long InsertFolderTagTable(long folderId, long tagId)
+        {
+            var id = GetNextId("FOLDER_TAG", "FOLDER_TAG_ID");
+            var sql = "INSERT INTO FOLDER_TAG VALUES(" + id.ToString() + "," + folderId.ToString() + "," + tagId.ToString() + ")";
+            MyExecuteCommand(sql);
+            return id;
+        }
+
+        //タグを追加してタグIDを返す、タグが既に存在してたらそのIDを返す
+        public long SerchOrInsertTagTable(string tagName)
+        {
+
+            var cs = createConnectionString();
+            Tag res;
+            using (SQLiteConnection c = new SQLiteConnection(cs.ToString()))
+            {
+
+                c.Open();
+
+                using (DataContext dc = new DataContext(c))
+                {
+                    Table<Tag> rec = dc.GetTable<Tag>();
+                    res = (
+                        from x in rec.Where(x => x.TagName == tagName)
+                        select x).SingleOrDefault();
+                }
+                c.Close();
+            }
+
+            long id = 0l;
+            if (res != null) {
+                id = res.TagId;
+            }
+            else
+            {
+                id = GetNextId("TAG", "TAG_ID");
+                var sql = "INSERT INTO TAG VALUES(" + id.ToString() + ",\"" + tagName + "\")";
+                MyExecuteCommand(sql);
+            }
+
+            return id;
+        }
+
+        public void InsertThumbnailTable(string filePathMd5,string createTime)
+        {
+            var sql = "INSERT INTO THUMBNAIL VALUES(\"" + filePathMd5 + "\",\"" + createTime + "\")";
+            MyExecuteCommand(sql);
+        }
 
 
         //すべてのタグを取得

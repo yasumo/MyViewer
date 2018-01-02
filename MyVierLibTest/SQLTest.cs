@@ -22,6 +22,37 @@ namespace MyVierLibTest
         }
 
         [TestMethod]
+        public void InsertTest()
+        {
+            var dao = new Dao(TestUtils.GetReadSqliteFilePath());
+            var nextId1 = dao.GetNextId("FOLDER", "FOLDER_ID");
+            Assert.AreEqual(5L, nextId1);
+            var id = dao.InsertFolderTable(@"E:\hogehoge\[aaa]\bbb", 100l);
+            Assert.AreEqual(nextId1, id);
+            var nextId2 = dao.GetNextId("FOLDER", "FOLDER_ID");
+            Assert.AreEqual(6L, nextId2);
+
+            nextId1 = dao.GetNextId("FOLDER_TAG", "FOLDER_TAG_ID");
+            Assert.AreEqual(17L, nextId1);
+            id = dao.InsertFolderTagTable(0L, 100L);
+            Assert.AreEqual(nextId1, id);
+            nextId2 = dao.GetNextId("FOLDER_TAG", "FOLDER_TAG_ID");
+            Assert.AreEqual(18L, nextId2);
+
+            nextId1 = dao.GetNextId("TAG", "TAG_ID");
+            Assert.AreEqual(14, nextId1);
+            id = dao.SerchOrInsertTagTable("aaaB");
+            Assert.AreEqual(nextId1, id);
+            nextId2 = dao.GetNextId("TAG", "TAG_ID");
+            Assert.AreEqual(15L, nextId2);
+
+
+            id = dao.SerchOrInsertTagTable("aaa");
+            Assert.AreEqual(4L, id);
+
+        }
+
+        [TestMethod]
         public void NextIdTest()
         {
             var dao = new Dao(TestUtils.GetReadSqliteFilePath());
