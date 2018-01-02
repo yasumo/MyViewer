@@ -23,9 +23,12 @@ namespace MyVierLibTest
             var picDir = TestUtils.GetPicDir();
             var fo = new FolderOperator();
             List<string> ext = new List<string> { ".jpg", ".png" };
+            int num = 0;
             foreach (var filePath in fo.GetAllFilePathList(fo.GetAllFolderPathList(picDir), ext)){
+                num++;
                 Console.WriteLine(filePath);
             }
+            Assert.AreEqual(7, num);
 
 
 
