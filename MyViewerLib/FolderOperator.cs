@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using System;
+using System.IO;
+using System.Collections.Generic;
+
 namespace MyViewerLib
 {
     public class FolderOperator
@@ -24,22 +28,51 @@ namespace MyViewerLib
         }
 
 
-        //TODO:一階層分のファイルをすべて取得するメソッド
-        public List<string> GetAllFilePathList(List<string> folderList, List<string> ext)
+        //複数フォルダの複数拡張子のファイルを一階層分すべて取得するメソッド
+        public IEnumerable<string> GetAllFilePathList(IEnumerable<string> folderList, List<string> ext)
         {
-            var ret = new List<string>();
-
-            return ret;
+            foreach(var folderPath in folderList)
+            {
+                var fileList = GetFilePathList(folderPath, ext);
+                foreach (var file in fileList)
+                {
+                    yield return file;
+                }
+            }
         }
 
-        //TODOベースパスからフォルダのリストをすべて取得するメソッド
-        public List<string> GetAllFolderPathList(string baseFolderPath)
+        //単一フォルダの複数拡張子のファイルを一階層分すべて取得するメソッド
+        public IEnumerable<string> GetFilePathList(string folderPath, List<string> extList)
         {
-            var ret = new List<string>();
+            var lowerExt = new List<string>();
+            foreach(var ext in extList)
+            {
+                lowerExt.Add(ext.ToLower());
+            }
 
-            return ret;
+            return Directory.EnumerateFiles(
+                    folderPath, // 検索開始ディレクトリ
+                    "*", // 検索パターン
+                    SearchOption.TopDirectoryOnly)
+                    .Where(path =>lowerExt.Contains(Path.GetExtension(path).ToLower()));
+
         }
-        //TODO
+
+        //ベースパスいかにあるフォルダのパスをリストですべて取得するメソッド
+        public IEnumerable<string> GetAllFolderPathList(string baseFolderPath)
+        {
+            return Directory.EnumerateDirectories(
+                    baseFolderPath, // 検索開始ディレクトリ
+                    "*", // 検索パターン
+                    SearchOption.AllDirectories);
+
+        }
+
+        //TODOベースパスのフォルダを全部消すメソッド
+        private void DeleteAllFiles(string targetFolderPath)
+        {
+
+        }
 
     }
 }

@@ -18,6 +18,20 @@ namespace MyVierLibTest
         }
 
         [TestMethod]
+        public void GetFileTest()
+        {
+            var picDir = TestUtils.GetPicDir();
+            var fo = new FolderOperator();
+            List<string> ext = new List<string> { ".jpg", ".png" };
+            foreach (var filePath in fo.GetAllFilePathList(fo.GetAllFolderPathList(picDir), ext)){
+                Console.WriteLine(filePath);
+            }
+
+
+
+        }
+
+        [TestMethod]
         public void FolderReadTest()
         {
 
