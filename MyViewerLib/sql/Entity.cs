@@ -7,21 +7,6 @@ using System.Data.Linq.Mapping;
 
 namespace MyViewerLib
 {
-    [Table(Name = "TestTable")]
-    public class TTestData
-    {
-        //ID
-        [Column(Name = "Id", DbType = "INT", CanBeNull = true, IsPrimaryKey = false)]
-        public Int32? Id { get; set; }
-
-        // Title
-        [Column(Name = "Title", DbType = "NVARCHAR", CanBeNull = true)]
-        public String Title { get; set; }
-
-        // Detail
-        [Column(Name = "Detail", DbType = "NVARCHAR", CanBeNull = true)]
-        public String Detail { get; set; }
-    }
 
 
     [Table(Name = "TAG")]
@@ -32,7 +17,7 @@ namespace MyViewerLib
         public Int64 TagId { get; set; }
 
         // TagName
-        [Column(Name = "Tag_Name", DbType = "NVARCHAR", CanBeNull = false)]
+        [Column(Name = "TAG_NAME", DbType = "NVARCHAR", CanBeNull = false)]
         public String TagName { get; set; }
 
     }
