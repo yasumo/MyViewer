@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -24,22 +22,18 @@ namespace MyViewerLib
             return ret;
         }
 
-
-        [DllImport("kernel32.dll")]
-        private static extern int GetPrivateProfileString(
-
-        string lpApplicationName,
-        string lpKeyName,
-        string lpDefault,
-        StringBuilder lpReturnedstring,
-        int nSize,
-        string lpFileName);
-
-        public string GetIniValue(string path, string section, string key)
+        public static string GetSqliteFilePathStr(string iniPath)
         {
-            StringBuilder sb = new StringBuilder(256);
-            GetPrivateProfileString(section, key, string.Empty, sb, sb.Capacity, path);
-            return sb.ToString();
+            KernelUtils kernel = new KernelUtils();
+            var targetDir = kernel.GetIniValue(iniPath, "settings", "DBFilePath");
+            return targetDir;
+        }
+
+        public static string GetPicDirPathStr(string iniPath)
+        {
+            KernelUtils kernel = new KernelUtils();
+            var targetDir = kernel.GetIniValue(iniPath, "settings", "PictureDirectory");
+            return targetDir;
         }
 
         //TODO

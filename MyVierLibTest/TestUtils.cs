@@ -13,15 +13,13 @@ namespace MyVierLibTest
 
         public static string GetSqliteFilePath()
         {
-            FolderOperator kernel = new FolderOperator();
-            var targetDir = kernel.GetIniValue(IniPath, "settings", "DBFilePath");
+            var targetDir = FolderOperator.GetSqliteFilePathStr(IniPath);
             return targetDir;
         }
 
         public static string GetPicDir()
         {
-            FolderOperator kernel = new FolderOperator();
-            var targetDir = kernel.GetIniValue(TestUtils.IniPath, "settings", "PictureDirectory");
+            var targetDir = FolderOperator.GetPicDirPathStr(IniPath);
             return targetDir;
         }
     }
