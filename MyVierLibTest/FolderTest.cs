@@ -30,7 +30,20 @@ namespace MyVierLibTest
             }
             Assert.AreEqual(7, num);
 
+        }
 
+        [TestMethod]
+        public void GetFileNumTest()
+        {
+            var picDir = TestUtils.GetPicDir();
+            var fo = new FolderOperator();
+            List<string> ext = new List<string> {  ".png" };
+            var num = 0;
+            foreach (var folderPath in fo.GetAllFolderPathList(picDir))
+            {
+                num += fo.GetFileNum(folderPath, ext);
+            }
+            Assert.AreEqual(6, num);
 
         }
 

@@ -58,7 +58,15 @@ namespace MyViewerLib
 
         }
 
-        //ベースパスいかにあるフォルダのパスをリストですべて取得するメソッド
+        //単一フォルダの複数拡張子のファイルを一階層分取得して、その数を返すメソッド
+        public int GetFileNum(string folderPath, List<string> extList)
+        {
+            var fileList = GetFilePathList(folderPath, extList);
+            return fileList.Count();
+        }
+
+
+        //ベースパス以下にあるフォルダのパスをリストですべて取得するメソッド
         public IEnumerable<string> GetAllFolderPathList(string baseFolderPath)
         {
             return Directory.EnumerateDirectories(
@@ -67,6 +75,7 @@ namespace MyViewerLib
                     SearchOption.AllDirectories);
 
         }
+
 
         //TODOベースパスのフォルダを全部消すメソッド
         private void DeleteAllFiles(string targetFolderPath)
