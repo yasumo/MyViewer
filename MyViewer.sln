@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyViewerLib", "MyViewerLib\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyVierLibTest", "MyVierLibTest\MyVierLibTest.csproj", "{A45D747C-BA32-43BE-97A4-F0BB654F2DB2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6A2799A9-D39E-4ED6-9D06-ED90515A758B}"
+	ProjectSection(SolutionItems) = preProject
+		設計書.txt = 設計書.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

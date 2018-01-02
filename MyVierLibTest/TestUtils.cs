@@ -9,17 +9,24 @@ namespace MyVierLibTest
 {
     public class TestUtils
     {
-        public static string IniPath = @".\test\settings\settings.ini";
+        public static string IniPathRead = @".\test\settings\settings_read.ini";
+        public static string IniPathWrite = @".\test\settings\settings_write.ini";
 
-        public static string GetSqliteFilePath()
+        public static string GetReadSqliteFilePath()
         {
-            var targetDir = SettingUtils.GetSqliteFilePath(IniPath);
+            var targetDir = SettingUtils.GetSqliteFilePath(IniPathRead);
+            return targetDir;
+        }
+
+        public static string GetWriteSqliteFilePath()
+        {
+            var targetDir = SettingUtils.GetSqliteFilePath(IniPathWrite);
             return targetDir;
         }
 
         public static string GetPicDir()
         {
-            var targetDir = SettingUtils.GetPicDirPath(IniPath);
+            var targetDir = SettingUtils.GetPicDirPath(IniPathRead);
             return targetDir;
         }
     }

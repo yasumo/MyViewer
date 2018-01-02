@@ -13,8 +13,8 @@ namespace MyVierLibTest
         public void SqlTest()
         {
 
-            var dao = new Dao(TestUtils.GetSqliteFilePath());
-            var res = dao.GetAllTableEntity();
+            var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
+            var res = dao.GetAllTag();
             Assert.AreEqual(0, res[0].TagId);
             Assert.AreEqual(@"hoge", res[0].TagName);
 
@@ -22,9 +22,9 @@ namespace MyVierLibTest
         [TestMethod]
         public void GetOtherTagNumTest()
         {
-            var dao = new Dao(TestUtils.GetSqliteFilePath());
+            var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
             {
-                var ret = dao.GetOtherTagNum(new List<string> { @"あああ", @"uuu" });
+                var ret = dao.GetOtherTag(new List<string> { @"あああ", @"uuu" });
 
                 Assert.AreEqual(5, ret.Count);
                 Assert.AreEqual(ret[0], (9, @"fda", 17));
@@ -39,7 +39,7 @@ namespace MyVierLibTest
         [TestMethod]
         public void SearchFolderIdListFromTagNameTest()
         {
-            var dao = new Dao(TestUtils.GetSqliteFilePath());
+            var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
             {
                 var ret = dao.GetFolderIdListHaving(@"あああ",null);
                 Assert.AreEqual(3, ret.Count);
@@ -77,7 +77,7 @@ namespace MyVierLibTest
         [TestMethod]
         public void SearchFolderPathFromFolderId()
         {
-            var dao = new Dao(TestUtils.GetSqliteFilePath());
+            var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
             {
                 var ret = dao.GetFolderPath(4);
                 Assert.AreEqual(@"E:\[bbb][あああ]\[settings]\[aaa][fdsa]", ret);
@@ -94,7 +94,7 @@ namespace MyVierLibTest
         [TestMethod]
         public void CountInsideFileNum()
         {
-            var dao = new Dao(TestUtils.GetSqliteFilePath());
+            var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
             {
                 var ret = dao.GetSumOfFileNum(new List<Int64> { 0, 1, 2 });
                 Assert.AreEqual(38, ret);
