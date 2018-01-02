@@ -13,12 +13,26 @@ namespace MyVierLibTest
         [TestMethod]
         public void ClearTmpTableTest() {
             var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
+            var res1 = dao.GetAllTag();
+            Assert.AreEqual(14, res1.Count);
+
             dao.ClearTmpTable();
-            var res = dao.GetAllTag();
-            Assert.AreEqual(0, res.Count);
+            var res2 = dao.GetAllTag();
+            Assert.AreEqual(0, res2.Count);
         }
 
+        [TestMethod]
+        public void NextIdTest()
+        {
+            var dao = new Dao(TestUtils.GetReadSqliteFilePath());
+            var nextId1 = dao.GetNextId("FOLDER","FOLDER_ID");
+            Assert.AreEqual(5, nextId1);
 
+            dao.ClearTmpTable();
+            var nextId2 = dao.GetNextId("FOLDER", "FOLDER_ID");
+            Assert.AreEqual(1, nextId2);
+
+        }
         [TestMethod]
         public void SqlTest()
         {

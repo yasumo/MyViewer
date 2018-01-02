@@ -29,21 +29,44 @@ namespace MyViewerLib
         public void ClearTmpTable()
         {
             var cs = createConnectionString();
-            List<Folder> ret;
             using (SQLiteConnection c = new SQLiteConnection(cs.ToString()))
             {
                 c.Open();
                 using (DataContext dc = new DataContext(c))
                 {
                     //dc.ExecuteCommand("UPDATE Products SET QuantityPerUnit = {0} WHERE ProductID = {1}", "24 boxes", 5);
-                    dc.ExecuteCommand("DELETE from TAG");
-                    dc.ExecuteCommand("DELETE from FOLDER_TAG");
-                    dc.ExecuteCommand("DELETE from THUMBNAIL");
+                    dc.ExecuteCommand(@"DELETE from TAG");
+                    dc.ExecuteCommand(@"DELETE from FOLDER");
+                    dc.ExecuteCommand(@"DELETE from FOLDER_TAG");
+                    dc.ExecuteCommand(@"DELETE from THUMBNAIL");
                 }
 
                 c.Close();
             }
         }
+
+        //テーブルの最大値の次の値を取る
+        public int GetNextId( string tableName, string id)
+        {
+            var cs = createConnectionString();
+            int nextId = 0;
+            using (SQLiteConnection c = new SQLiteConnection(cs.ToString()))
+            {
+                c.Open();
+                using (DataContext dc = new DataContext(c))
+                {
+                    int? max = dc.ExecuteQuery<int?>(@"select max ("+id+") from "+tableName ).First();
+                    nextId = max.GetValueOrDefault(0) + 1;
+                }
+
+                c.Close();
+            }
+
+            return nextId;
+        }
+
+        //TODO:インサートを作成する
+
 
         //すべてのタグを取得
         public List<Tag> GetAllTag()
