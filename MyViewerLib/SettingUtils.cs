@@ -8,14 +8,14 @@ namespace MyViewerLib
 {
     public class SettingUtils
     {
-        public static string GetSqliteFilePathStr(string iniPath)
+        public static string GetSqliteFilePath(string iniPath)
         {
             KernelUtils kernel = new KernelUtils();
             var targetDir = kernel.GetIniValue(iniPath, "settings", "DBFilePath");
             return targetDir;
         }
 
-        public static string GetPicDirPathStr(string iniPath)
+        public static string GetPicDirPath(string iniPath)
         {
             KernelUtils kernel = new KernelUtils();
             var targetDir = kernel.GetIniValue(iniPath, "settings", "PictureDirectory");

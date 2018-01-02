@@ -24,11 +24,20 @@ namespace MyViewerLib
 
 
         //TODO
-        public List<string> GetFileList(List<string> folderList ,List<string> ext)
+        public List<string> GetAllFilePathList(List<string> folderList, List<string> ext)
         {
             var ret = new List<string>();
 
             return ret;
         }
+
+        //TODO
+        public List<string> GetTagFilePathList(List<string> folderList, List<string> ext)
+        {
+            var ret = new List<string>();
+
+            return ret;
+        }
+
     }
 }
