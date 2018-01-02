@@ -21,6 +21,7 @@ namespace MyVierLibTest
             Assert.AreEqual(0, res2.Count);
         }
 
+        //同じテーブル使ってるので、他のテストが通らなくなる糞実装
         [TestMethod]
         public void InsertTest()
         {
@@ -49,6 +50,8 @@ namespace MyVierLibTest
 
             id = dao.SerchOrInsertTagTable("aaa");
             Assert.AreEqual(4L, id);
+
+            dao.InsertThumbnailTable("aaaaaaaaaaaaaaa","2017-10-10");
 
         }
 
