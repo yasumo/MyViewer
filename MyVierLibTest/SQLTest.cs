@@ -13,7 +13,7 @@ namespace MyVierLibTest
         public void SqlTest()
         {
 
-            var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
+            var dao = new Dao(TestUtils.GetReadSqliteFilePath());
             var res = dao.GetAllTag();
             Assert.AreEqual(0, res[0].TagId);
             Assert.AreEqual(@"hoge", res[0].TagName);
@@ -22,7 +22,7 @@ namespace MyVierLibTest
         [TestMethod]
         public void GetOtherTagNumTest()
         {
-            var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
+            var dao = new Dao(TestUtils.GetReadSqliteFilePath());
             {
                 var ret = dao.GetOtherTag(new List<string> { @"あああ", @"uuu" });
 
@@ -39,7 +39,7 @@ namespace MyVierLibTest
         [TestMethod]
         public void SearchFolderIdListFromTagNameTest()
         {
-            var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
+            var dao = new Dao(TestUtils.GetReadSqliteFilePath());
             {
                 var ret = dao.GetFolderIdListHaving(@"あああ",null);
                 Assert.AreEqual(3, ret.Count);
@@ -94,7 +94,7 @@ namespace MyVierLibTest
         [TestMethod]
         public void CountInsideFileNum()
         {
-            var dao = new Dao(TestUtils.GetWriteSqliteFilePath());
+            var dao = new Dao(TestUtils.GetReadSqliteFilePath());
             {
                 var ret = dao.GetSumOfFileNum(new List<Int64> { 0, 1, 2 });
                 Assert.AreEqual(38, ret);
