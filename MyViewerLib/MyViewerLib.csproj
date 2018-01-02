@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="ImageOperator.cs" />
     <Compile Include="KernelUtils.cs" />
+    <Compile Include="SettingUtils.cs" />
     <Compile Include="sql\Dao.cs" />
     <Compile Include="sql\Entity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

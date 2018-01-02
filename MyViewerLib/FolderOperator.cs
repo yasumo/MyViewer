@@ -22,19 +22,6 @@ namespace MyViewerLib
             return ret;
         }
 
-        public static string GetSqliteFilePathStr(string iniPath)
-        {
-            KernelUtils kernel = new KernelUtils();
-            var targetDir = kernel.GetIniValue(iniPath, "settings", "DBFilePath");
-            return targetDir;
-        }
-
-        public static string GetPicDirPathStr(string iniPath)
-        {
-            KernelUtils kernel = new KernelUtils();
-            var targetDir = kernel.GetIniValue(iniPath, "settings", "PictureDirectory");
-            return targetDir;
-        }
 
         //TODO
         public List<string> GetFileList(List<string> folderList ,List<string> ext)
