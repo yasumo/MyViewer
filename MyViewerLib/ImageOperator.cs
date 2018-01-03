@@ -20,33 +20,52 @@ namespace MyViewerLib
             this.thumbnailBaseDir = thumbnailBaseDir;
         }
 
-        public Bitmap GetThumbnail(string imageFilePath)
+        //サムネイルが無ければ作成し返す、あればそのまま返す
+        public Image GetThumbnail(string imageFilePath)
         {
             var thumbnailFilePath = CreateThumbnailPath(imageFilePath);
-            Bitmap bmp;
+            Image img;
 
             if (File.Exists(thumbnailFilePath))
             {
-                bmp = (Bitmap)Image.FromFile(imageFilePath);
+                img = Image.FromFile(imageFilePath);
             }
             else
             {
-                bmp = CreateThumbnail(imageFilePath);
+                img = CreateThumbnail(imageFilePath);
+                img.Save(thumbnailFilePath, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
-            return bmp;
+            return img;
         }
 
-        //TODO:画像ファイルを受け取ってサムネイルを作るやつ
-        public Bitmap CreateThumbnail(string imageFilePath)
+
+
+        //画像ファイルを受け取ってサムネイルを作るやつ
+        public Image CreateThumbnail(string imageFilePath)
         {
-            if (File.Exists(imageFilePath))
+            if (!File.Exists(imageFilePath))
             {
                 throw new ArgumentException("imageFileNotting:"+imageFilePath);
             }
+            // 画像オブジェクトの作成
+            Image orig = Image.FromFile(imageFilePath);
 
-            Bitmap img = new Bitmap(200, 100);
-            return img;
+            // サムネイルの作成
+            //TODO:アス比固定縮小
+            Image thumbnail = orig.GetThumbnailImage(
+              160, 120, delegate { return false; }, IntPtr.Zero);
 
+            return thumbnail;
+
+        }
+
+        //ファイルパスをサムネイルにして全部返す
+        public IEnumerable<Image> CreateAllThumbnail(IEnumerable<string> imageFilePathList)
+        {
+            foreach(var filePath in imageFilePathList)
+            {
+                yield return GetThumbnail(filePath);
+            }
         }
 
         //古いサムネイルを削除する

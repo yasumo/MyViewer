@@ -28,7 +28,7 @@ namespace MyVierLibTest
             var dao = new Dao(TestUtils.GetReadSqliteFilePath());
             var nextId1 = dao.GetNextId("FOLDER", "FOLDER_ID");
             Assert.AreEqual(5L, nextId1);
-            var id = dao.InsertFolderTable(@"E:\hogehoge\[aaa]\bbb", 100l);
+            var id = dao.InsertFolderTable(@"E:\hogehoge\[aaa]\bbb", 100L);
             Assert.AreEqual(nextId1, id);
             var nextId2 = dao.GetNextId("FOLDER", "FOLDER_ID");
             Assert.AreEqual(6L, nextId2);

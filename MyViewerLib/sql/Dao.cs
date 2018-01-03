@@ -115,7 +115,7 @@ namespace MyViewerLib
                 c.Close();
             }
 
-            long id = 0l;
+            long id = 0L;
             if (res != null) {
                 id = res.TagId;
             }
