@@ -59,6 +59,20 @@ namespace MyVierLibTest
         }
 
         [TestMethod]
+        public void InsertMulutiTest()
+        {
+            using (var dao = new Dao(TestUtils.GetWriteSqliteFilePath()))
+            {
+                var hoge = new List<long>();
+                hoge.Add(10);
+                hoge.Add(12);
+                hoge.Add(13);
+                hoge.Add(14);
+                dao.InsertMulutiFolderTagTable(1, hoge);
+            }
+        }
+
+        [TestMethod]
         public void NextIdTest()
         {
             using (var dao = new Dao(TestUtils.GetWriteSqliteFilePath()))

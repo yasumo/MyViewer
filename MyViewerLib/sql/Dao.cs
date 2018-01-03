@@ -88,6 +88,33 @@ namespace MyViewerLib
             return id;
         }
 
+        public List<long> InsertMulutiFolderTagTable(long folderId, List<long> tagIdList)
+        {
+            var retIdList = new List<long>();
+            if (tagIdList.Count <= 0)
+            {
+                return retIdList;
+            }
+
+            for (int i=0;i<tagIdList.Count;i++)
+            {
+                //最大値の連番を取る
+                retIdList.Add(GetNextId("FOLDER_TAG", "FOLDER_TAG_ID") + i);
+            }
+
+            var values = "(" + retIdList[0].ToString() + ", " + folderId.ToString() + ", " + tagIdList[0].ToString() + ")";
+            for (int i = 1; i < tagIdList.Count; i++)
+            {
+                values += ",(" + retIdList[i].ToString() + ", " + folderId.ToString() + ", " + tagIdList[i].ToString() + ")";
+
+            }
+            var sql = @"INSERT INTO FOLDER_TAG VALUES " + values;
+            MyExecuteCommand(sql);
+
+
+            return retIdList;
+        }
+
         //タグを追加してタグIDを返す、タグが既に存在してたらそのIDを返す
         public long SearchOrInsertTagTable(string tagName)
         {
