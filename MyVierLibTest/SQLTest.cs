@@ -42,13 +42,13 @@ namespace MyVierLibTest
 
             nextId1 = dao.GetNextId("TAG", "TAG_ID");
             Assert.AreEqual(14, nextId1);
-            id = dao.SerchOrInsertTagTable("aaaB");
+            id = dao.SearchOrInsertTagTable("aaaB");
             Assert.AreEqual(nextId1, id);
             nextId2 = dao.GetNextId("TAG", "TAG_ID");
             Assert.AreEqual(15L, nextId2);
 
 
-            id = dao.SerchOrInsertTagTable("aaa");
+            id = dao.SearchOrInsertTagTable("aaa");
             Assert.AreEqual(4L, id);
 
 

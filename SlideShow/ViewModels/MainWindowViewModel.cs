@@ -5,13 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.UI.ViewManagement;
 
-namespace MyViewer.ViewModels
+namespace SlideShow.ViewModels
 {
-    public class MainPageViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
-        public Views.MainPage View { get; private set; } = null;
+        public MainWindow View { get; private set; } = null;
         public event PropertyChangedEventHandler PropertyChanged;
         string searchText;
         public string SearchText
@@ -44,9 +43,9 @@ namespace MyViewer.ViewModels
         public ICommand Search { get; private set; }
         public ICommand CreateIndex { get; private set; }
 
-        public void Initialize(Views.MainPage mainPage)
+        public void Initialize(MainWindow mainWindow)
         {
-            View = mainPage;
+            View = mainWindow;
             SlideShow = new SimpleCommand(SlideShowMethod);
             Search = new SimpleCommand(SearchMethod);
             CreateIndex = new SimpleCommand(CreateIndexMethod);
@@ -54,14 +53,18 @@ namespace MyViewer.ViewModels
 
         private void SlideShowMethod()
         {
-            var view = ApplicationView.GetForCurrentView();
-            view.TryEnterFullScreenMode();
+            //var view = ApplicationView.GetForCurrentView();
+            //view.TryEnterFullScreenMode();
+            View.WindowState = System.Windows.WindowState.Normal;
+            View.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
             LogText = "aaaa:" + SearchText;
         }
         private void SearchMethod()
         {
-            var view = ApplicationView.GetForCurrentView();
-            view.ExitFullScreenMode();
+            //var view = ApplicationView.GetForCurrentView();
+            //view.ExitFullScreenMode();
+            View.WindowState = System.Windows.WindowState.Maximized;
+            View.WindowStyle = System.Windows.WindowStyle.None;
             LogText = "bbbb:" + SearchText;
         }
         private void CreateIndexMethod()
