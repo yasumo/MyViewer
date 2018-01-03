@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MyViewerLib;
+using SlideShow.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -69,7 +71,19 @@ namespace SlideShow.ViewModels
         }
         private void CreateIndexMethod()
         {
-            LogText = "cccc:" + SearchText;
+            var fo = new FolderOperator();
+            //DEBUG
+            int i = 0;
+            foreach (var folderPath in fo.GetAllFolderPathList(Settings.GetPicDir()))
+            {
+//                LogText += folderPath + Environment.NewLine;
+                Console.WriteLine(folderPath);
+
+                //DEBUG
+                if (i > 100) break;
+
+            }
+            //var dao = new Dao(Settings.GetSqliteFilePath());
         }
 
     }
