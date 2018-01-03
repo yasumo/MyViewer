@@ -8,7 +8,7 @@ namespace SlideShow.Models
 {
     public class SlideShowConst
     {
-        public static List<string> PIC_EXT_LIST = new List<string> { ".jpg", ".png" };
+        public static List<string> PIC_EXT_LIST = new List<string> { ".jpg", ".png",".gif",".bmp" };
 
     }
 }

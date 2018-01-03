@@ -78,22 +78,35 @@ namespace SlideShow.ViewModels
            
 
             var fo = new FolderOperator();
-            //DEBUG
-            int i = 0;
+            int folderNum = 0;
+            //画像のベースフォルダのすべてのフォルダに対して
             foreach (var folderPath in fo.GetAllFolderPathList(Settings.GetPicDir()))
             {
-                //                LogText += folderPath + Environment.NewLine;
-                foreach (var tag in fo.GetTagList(folderPath))
+                //画像ファイル拡張子のファイルの数を数えて
+                var filenum = fo.GetFileNum(folderPath, SlideShowConst.PIC_EXT_LIST);
+
+                //画像ファイル拡張子のファイルの数が1個以上であれば
+                if (filenum > 0)
                 {
-                    Console.WriteLine(tag);
+                    //フォルダ情報を登録し
+                    var folderId = dao.InsertFolderTable(folderPath,filenum);
+
+                    //そのフォルダのタグを分解して
+                    foreach (var tag in fo.GetTagList(folderPath))
+                    {
+                        //タグIDを発行してもらい
+                        var tagid = dao.SearchOrInsertTagTable(tag);
+                        //folderTagIdに登録
+                        var folderTagId = dao.InsertFolderTagTable(folderId, tagid);
+
+                        Console.WriteLine(@"{0}:{1}:{2}:{3}",folderNum, folderTagId, tag, folderPath);
+
+                    }
                 }
 
-                //DEBUG
-                i++;
-                if (i > 100) break;
+                folderNum++;
 
             }
-            //;
         }
 
     }
