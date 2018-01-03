@@ -70,7 +70,7 @@ namespace SlideShow.ViewModels
             LogText = "bbbb:" + SearchText;
         }
 
-
+        //フォルダとタグテーブルに追加するやつ
         private void InsertFolderTagTable(Dao dao, List<string> folderPathList, List<long> folderIdList)
         {
             if (folderIdList.Count != folderPathList.Count)
@@ -95,7 +95,7 @@ namespace SlideShow.ViewModels
                     insertFolderIdList.Add(folderId);
                 }
                 // 一括登録する
-                if (insertFolderIdList.Count > 50)
+                if (insertFolderIdList.Count > 2000)
                 {
                     var folderTagIdList = dao.InsertMulutiFolderTagTable(insertFolderIdList, inserttagIdList);
                     inserttagIdList = new List<long>();
@@ -112,7 +112,7 @@ namespace SlideShow.ViewModels
 
         }
 
-
+        //フォルダを全部検索してファイル数やらタグやら登録するやつ
         private void InsertTable()
         {
             FolderOperator.DeleteOldFiles(Settings.GetThumbDir(), 30);
@@ -139,7 +139,7 @@ namespace SlideShow.ViewModels
                         //一括登録するやつに追加
                         folderPathList.Add(folderPath);
                         folderFileNumList.Add(filenum);
-                        if (folderPathList.Count >= 50)
+                        if (folderPathList.Count >= 2000)
                         {
                             Console.WriteLine(folderNum);
                             folderIdList = dao.InsertMulutiFolderTable(folderPathList, folderFileNumList);
@@ -157,6 +157,7 @@ namespace SlideShow.ViewModels
                 dao.Commit();
             }
         }
+
         private void CreateIndexMethod()
         {
             InsertTable();
