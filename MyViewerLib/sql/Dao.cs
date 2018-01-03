@@ -88,6 +88,32 @@ namespace MyViewerLib
             return id;
         }
 
+        public List<long> InsertMulutiFolderTable(List<string> folderPathList, List<long> insideFileNumList)
+        {
+            var retIdList = new List<long>();
+            if (!(folderPathList.Count > 0 && folderPathList.Count == insideFileNumList.Count))
+            {
+                return retIdList;
+            }
+
+            for (int i = 0; i < folderPathList.Count; i++)
+            {
+                //最大値の連番を取る
+                retIdList.Add(GetNextId("FOLDER", "FOLDER_ID") + i);
+            }
+            var values = "(" + retIdList[0].ToString() + ",\"" + folderPathList[0] + "\"," + insideFileNumList[0].ToString() + ")";
+
+            for (int i = 1; i < retIdList.Count; i++)
+            {
+                values += ",(" + retIdList[i].ToString() + ",\"" + folderPathList[i] + "\"," + insideFileNumList[i].ToString() + ")";
+
+            }
+            var sql = @"INSERT INTO FOLDER VALUES " + values;
+            MyExecuteCommand(sql);
+
+            return retIdList;
+        }
+
         public List<long> InsertMulutiFolderTagTable(long folderId, List<long> tagIdList)
         {
             var retIdList = new List<long>();

@@ -70,6 +70,21 @@ namespace MyVierLibTest
                 hoge.Add(14);
                 dao.InsertMulutiFolderTagTable(1, hoge);
             }
+            using (var dao = new Dao(TestUtils.GetWriteSqliteFilePath()))
+            {
+                var insideFileNumList = new List<long>();
+                insideFileNumList.Add(10);
+                insideFileNumList.Add(12);
+                insideFileNumList.Add(13);
+                insideFileNumList.Add(14);
+                var folderPathList = new List<string>();
+                folderPathList.Add(@"E:\aaa");
+                folderPathList.Add(@"E:\bbb");
+                folderPathList.Add(@"E:\ccc");
+                folderPathList.Add(@"E:\aaa");
+
+                dao.InsertMulutiFolderTable(folderPathList, insideFileNumList);
+            }
         }
 
         [TestMethod]
