@@ -63,12 +63,17 @@ namespace MyVierLibTest
         {
             using (var dao = new Dao(TestUtils.GetWriteSqliteFilePath()))
             {
-                var hoge = new List<long>();
-                hoge.Add(10);
-                hoge.Add(12);
-                hoge.Add(13);
-                hoge.Add(14);
-                dao.InsertMulutiFolderTagTable(1, hoge);
+                var tagIdList = new List<long>();
+                tagIdList.Add(10);
+                tagIdList.Add(12);
+                tagIdList.Add(13);
+                tagIdList.Add(14);
+                var folderIdList = new List<long>();
+                folderIdList.Add(1);
+                folderIdList.Add(2);
+                folderIdList.Add(3);
+                folderIdList.Add(4);
+                dao.InsertMulutiFolderTagTable(folderIdList, tagIdList);
             }
             using (var dao = new Dao(TestUtils.GetWriteSqliteFilePath()))
             {

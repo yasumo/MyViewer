@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.Linq;
 using System.Data.SQLite;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace MyViewerLib
         SQLiteConnectionStringBuilder cs;
         SQLiteConnection c;
         DataContext dc;
+        DbTransaction transaction;
         bool ConnectionOpen = false;
 
         public Dao(string datasourcePath)
@@ -27,6 +29,17 @@ namespace MyViewerLib
             ConnectionOpen = true;
             dc = new DataContext(c);
         }
+        public void StartTransaction()
+        {
+            transaction = c.BeginTransaction();
+        }
+        public void Commit()
+        {
+            transaction.Commit();
+            transaction.Dispose();
+        }
+
+
 
         public void Close()
         {
@@ -114,10 +127,10 @@ namespace MyViewerLib
             return retIdList;
         }
 
-        public List<long> InsertMulutiFolderTagTable(long folderId, List<long> tagIdList)
+        public List<long> InsertMulutiFolderTagTable(List<long> folderIdList, List<long> tagIdList)
         {
             var retIdList = new List<long>();
-            if (tagIdList.Count <= 0)
+            if (!(folderIdList.Count > 0 && folderIdList.Count==tagIdList.Count))
             {
                 return retIdList;
             }
@@ -128,10 +141,10 @@ namespace MyViewerLib
                 retIdList.Add(GetNextId("FOLDER_TAG", "FOLDER_TAG_ID") + i);
             }
 
-            var values = "(" + retIdList[0].ToString() + ", " + folderId.ToString() + ", " + tagIdList[0].ToString() + ")";
+            var values = "(" + retIdList[0].ToString() + ", " + folderIdList[0].ToString() + ", " + tagIdList[0].ToString() + ")";
             for (int i = 1; i < tagIdList.Count; i++)
             {
-                values += ",(" + retIdList[i].ToString() + ", " + folderId.ToString() + ", " + tagIdList[i].ToString() + ")";
+                values += ",(" + retIdList[i].ToString() + ", " + folderIdList[i].ToString() + ", " + tagIdList[i].ToString() + ")";
 
             }
             var sql = @"INSERT INTO FOLDER_TAG VALUES " + values;
