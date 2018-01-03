@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageTest.cs" />
     <Compile Include="SQLTest.cs" />
     <Compile Include="TestUtils.cs" />
     <Compile Include="FolderTest.cs" />

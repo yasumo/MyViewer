@@ -11,9 +11,12 @@ namespace MyViewerLib
 {
     public class ImageOperator
     {
+        string picBaseDir;
         string thumbnailBaseDir;
-        public ImageOperator(string thumbnailBaseDir)
+
+        public ImageOperator(string picBaseDir,string thumbnailBaseDir)
         {
+            this.picBaseDir = picBaseDir;
             this.thumbnailBaseDir = thumbnailBaseDir;
         }
 
@@ -52,12 +55,34 @@ namespace MyViewerLib
             FolderOperator.DeleteOldFiles(this.thumbnailBaseDir,30);
         }
 
-        //TODO:ファイルパスからサムネイルのパスを作成
+        //ファイルパスからサムネイルのパスを作成
         public string CreateThumbnailPath(string filePath)
         {
-            return "hoge";
+            var ext = Path.GetExtension(filePath);
+            var fileName = CalcMd5(filePath) + ext;
+            var retFilePath = this.thumbnailBaseDir + Path.DirectorySeparatorChar + fileName;
+            return retFilePath;
         }
 
+        private string CalcMd5(string srcStr)
+        {
 
+            System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
+
+            // md5ハッシュ値を求める
+            byte[] srcBytes = System.Text.Encoding.UTF8.GetBytes(srcStr);
+            byte[] destBytes = md5.ComputeHash(srcBytes);
+
+            // 求めたmd5値を文字列に変換する
+            System.Text.StringBuilder destStrBuilder;
+            destStrBuilder = new System.Text.StringBuilder();
+            foreach (byte curByte in destBytes)
+            {
+                destStrBuilder.Append(curByte.ToString("x2"));
+            }
+
+            // 変換後の文字列を返す
+            return destStrBuilder.ToString();
+        }
     }
 }
