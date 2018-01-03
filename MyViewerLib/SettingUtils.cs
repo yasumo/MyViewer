@@ -22,5 +22,12 @@ namespace MyViewerLib
             return targetDir;
         }
 
+        public static string GetThumbDirPath(string iniPath)
+        {
+            KernelUtils kernel = new KernelUtils();
+            var targetDir = kernel.GetIniValue(iniPath, "settings", "ThumbnailDirectory");
+            return targetDir;
+        }
+
     }
 }

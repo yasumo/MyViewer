@@ -29,5 +29,11 @@ namespace MyVierLibTest
             var targetDir = SettingUtils.GetPicDirPath(IniPathRead);
             return targetDir;
         }
+
+        public static string GetThumbDir()
+        {
+            var targetDir = SettingUtils.GetThumbDirPath(IniPathWrite);
+            return targetDir;
+        }
     }
 }

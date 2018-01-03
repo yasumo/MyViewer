@@ -74,12 +74,23 @@ namespace MyViewerLib
 
         }
 
-
-        //TODO:フォルダにあるファイルを消す
-        private void DeleteFile(string targetFolderPath,string fileName)
+        //特定日付より古いファイルを削除する
+        public static int DeleteOldFiles(string targetDir, int day)
         {
-
+            int deleteCount = 0;
+            //更新日時がday日より以前のファイル
+            var targetFiles = Directory.EnumerateFiles(
+                    targetDir, // 検索開始ディレクトリ
+                    "*", // 検索パターン
+                    SearchOption.AllDirectories).Where(f => File.GetLastWriteTime(f) < DateTime.Now.AddDays(-day));
+            foreach (var file in targetFiles)
+            {
+                deleteCount++;
+                File.Delete(file);
+            }
+            return deleteCount;
         }
+
 
     }
 }

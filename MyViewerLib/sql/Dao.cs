@@ -38,7 +38,6 @@ namespace MyViewerLib
                     dc.ExecuteCommand(@"DELETE from TAG");
                     dc.ExecuteCommand(@"DELETE from FOLDER");
                     dc.ExecuteCommand(@"DELETE from FOLDER_TAG");
-                    dc.ExecuteCommand(@"DELETE from THUMBNAIL");
                 }
 
                 c.Close();
@@ -130,11 +129,6 @@ namespace MyViewerLib
             return id;
         }
 
-        public void InsertThumbnailTable(string filePathMd5,string createTime)
-        {
-            var sql = "INSERT INTO THUMBNAIL VALUES(\"" + filePathMd5 + "\",\"" + createTime + "\")";
-            MyExecuteCommand(sql);
-        }
 
 
         //すべてのタグを取得

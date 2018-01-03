@@ -51,7 +51,6 @@ namespace MyVierLibTest
             id = dao.SerchOrInsertTagTable("aaa");
             Assert.AreEqual(4L, id);
 
-            dao.InsertThumbnailTable("aaaaaaaaaaaaaaa","2017-10-10");
 
         }
 

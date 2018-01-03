@@ -14,7 +14,17 @@ namespace MyVierLibTest
         public void IniFileReadTest()
         {
             var picDir = TestUtils.GetPicDir();
-            Assert.AreEqual(@"E:\WindowsWorkFiles\Documents\visual studio 2017\Projects\MyViewer\MyVierLibTest\test", picDir);
+            Assert.AreEqual(@"E:\WindowsWorkFiles\Documents\visual studio 2017\Projects\MyViewer\MyVierLibTest\bin\Debug\test", picDir);
+        }
+
+        [TestMethod]
+        public void DeleteFilesTest()
+        {
+            var thumbnailDir = TestUtils.GetThumbDir();
+            var count = FolderOperator.DeleteOldFiles(thumbnailDir, 30);
+            Assert.AreEqual(1, count);
+
+
         }
 
         [TestMethod]
