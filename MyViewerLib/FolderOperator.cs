@@ -77,6 +77,11 @@ namespace MyViewerLib
         //特定日付より古いファイルを削除する
         public static int DeleteOldFiles(string targetDir, int day)
         {
+            if (!File.Exists(targetDir))
+            {
+                return 0;
+            }
+
             int deleteCount = 0;
             //更新日時がday日より以前のファイル
             var targetFiles = Directory.EnumerateFiles(

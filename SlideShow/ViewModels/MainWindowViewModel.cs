@@ -71,19 +71,29 @@ namespace SlideShow.ViewModels
         }
         private void CreateIndexMethod()
         {
+
+            FolderOperator.DeleteOldFiles(Settings.GetThumbDir(), 30);
+            var dao = new Dao(Settings.GetSqliteFilePath());
+            dao.ClearTmpTable();
+           
+
             var fo = new FolderOperator();
             //DEBUG
             int i = 0;
             foreach (var folderPath in fo.GetAllFolderPathList(Settings.GetPicDir()))
             {
-//                LogText += folderPath + Environment.NewLine;
-                Console.WriteLine(folderPath);
+                //                LogText += folderPath + Environment.NewLine;
+                foreach (var tag in fo.GetTagList(folderPath))
+                {
+                    Console.WriteLine(tag);
+                }
 
                 //DEBUG
+                i++;
                 if (i > 100) break;
 
             }
-            //var dao = new Dao(Settings.GetSqliteFilePath());
+            //;
         }
 
     }
