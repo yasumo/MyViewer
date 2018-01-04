@@ -2,6 +2,7 @@
 using SlideShow.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -44,8 +45,8 @@ namespace SlideShow.ViewModels
             var imgFilePathList = fo.GetAllFilePathList(fo.GetFolderPathList(FolderList), SlideShowConst.PIC_EXT_LIST);
 
             this.ImagePathList = new List<string>(imgFilePathList);
-
-            this.ImagePathListBox = new ListCollectionView(this.ImagePathList);
+            //ObservableCollection
+            this.ImagePathListBox = new ListCollectionView(new ObservableCollection<object>(this.ImagePathList));
             this.ImagePathListBox.CurrentChanged += ImagePathListBox_CurrentChanged;
         }
 

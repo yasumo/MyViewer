@@ -1,0 +1,319 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>VirtualizingWrapPanel</name>
+    </assembly>
+    <members>
+        <member name="T:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel">
+            <summary>
+            子要素を仮想化する <see cref="T:System.Windows.Controls.WrapPanel"/>。
+            </summary>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ItemWidthProperty">
+            <summary>
+            <see cref="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ItemWidth"/> 依存関係プロパティの識別子。
+            </summary>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ItemHeightProperty">
+            <summary>
+            <see cref="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ItemHeight"/> 依存関係プロパティの識別子。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.IsWidthHeightValid(System.Object)">
+            <summary>
+            <see cref="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ItemWidth"/>, <see cref="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ItemHeight"/> に設定された値が
+            有効かどうかを検証するコールバック。
+            </summary>
+            <param name="value">プロパティに設定された値。</param>
+            <returns>値が有効な場合は true、無効な場合は false。</returns>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.OrientationProperty">
+            <summary>
+            <see cref="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.Orientation"/> 依存関係プロパティの識別子。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.OnOrientationChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            <see cref="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.Orientation"/> 依存関係プロパティが変更されたときに呼び出されるコールバック。
+            </summary>
+            <param name="d">プロパティの値が変更された <see cref="T:System.Windows.DependencyObject"/>。</param>
+            <param name="e">このプロパティの有効値に対する変更を追跡するイベントによって発行されるイベントデータ。</param>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.containerLayouts">
+            <summary>
+            指定したインデックスのアイテムの位置およびサイズを記憶するディクショナリ。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.MeasureOverride(System.Windows.Size)">
+            <summary>
+            子要素に必要なレイアウトのサイズを測定し、パネルのサイズを決定する。
+            </summary>
+            <param name="availableSize">子要素に与えることができる使用可能なサイズ。</param>
+            <returns>レイアウト時にこのパネルが必要とするサイズ。</returns>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>
+            子要素を配置し、パネルのサイズを決定する。
+            </summary>
+            <param name="finalSize">パネル自体と子要素を配置するために使用する親の末尾の領域。</param>
+            <returns>使用する実際のサイズ。</returns>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.prevSize">
+            <summary>
+            直前にレイアウトした要素のサイズ。
+            </summary>
+            <remarks>
+            <see cref="T:System.Windows.DataTemplate"/> 使用時、全要素のサイズが一致することを前提に、
+            要素のサイズの推定に使用する。
+            </remarks>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ContainerSizeForIndex(System.Int32)">
+            <summary>
+            指定したインデックスに対するアイテムのサイズを、実際にアイテムを生成せずに推定する。
+            </summary>
+            <param name="index">アイテムのインデックス。</param>
+            <returns>指定したインデックスに対するアイテムの推定サイズ。</returns>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.OnItemsChanged(System.Object,System.Windows.Controls.Primitives.ItemsChangedEventArgs)">
+            <summary>
+            このパネルの <see cref="T:System.Windows.Controls.ItemsControl"/> に関連付けられている
+            <see cref="P:System.Windows.Controls.ItemsControl.Items"/> コレクションが変更されたときに
+            呼び出されるコールバック。
+            </summary>
+            <param name="sender">イベントを発生させた <see cref="T:System.Object"/></param>
+            <param name="args">イベントデータ。</param>
+            <remarks>
+            <see cref="P:System.Windows.Controls.ItemsControl.Items"/> が変更された際
+            <see cref="P:System.Windows.Controls.Panel.InternalChildren"/> にも反映する。
+            </remarks>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.extent">
+            <summary>
+            エクステントのサイズ。
+            </summary>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.viewport">
+            <summary>
+            ビューポートのサイズ。
+            </summary>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.offset">
+            <summary>
+            スクロールしたコンテンツのオフセット。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.LineUp">
+            <summary>
+            コンテンツ内を 1 論理単位ずつ上にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.LineDown">
+            <summary>
+            コンテンツ内を 1 論理単位ずつ下にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.LineLeft">
+            <summary>
+            コンテンツ内を 1 論理単位ずつ左にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.LineRight">
+            <summary>
+            コンテンツ内を 1 論理単位ずつ右にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.PageUp">
+            <summary>
+            コンテンツ内を 1 ページずつ上にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.PageDown">
+            <summary>
+            コンテンツ内を 1 ページずつ下にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.PageLeft">
+            <summary>
+            コンテンツ内を 1 ページずつ左にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.PageRight">
+            <summary>
+            コンテンツ内を 1 ページずつ右にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.MouseWheelUp">
+            <summary>
+            ユーザがマウスのホイールボタンをクリックした後に、コンテンツ内を上にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.MouseWheelDown">
+            <summary>
+            ユーザがマウスのホイールボタンをクリックした後に、コンテンツ内を下にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.MouseWheelLeft">
+            <summary>
+            ユーザがマウスのホイールボタンをクリックした後に、コンテンツ内を左にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.MouseWheelRight">
+            <summary>
+            ユーザがマウスのホイールボタンをクリックした後に、コンテンツ内を右にスクロールする。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.MakeVisible(System.Windows.Media.Visual,System.Windows.Rect)">
+            <summary>
+            <see cref="T:System.Windows.Media.Visual"/> オブジェクトの座標空間が表示されるまで、
+            コンテンツを強制的にスクロールする。
+            </summary>
+            <param name="visual">表示可能になる <see cref="T:System.Windows.Media.Visual"/>。</param>
+            <param name="rectangle">表示する座標空間を識別する外接する四角形。</param>
+            <returns>表示される <see cref="T:System.Windows.Rect"/>。</returns>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.SetHorizontalOffset(System.Double)">
+            <summary>
+            水平オフセットの値を設定する。
+            </summary>
+            <param name="offset">包含するビューポートからのコンテンツの水平方向オフセットの程度。</param>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.SetVerticalOffset(System.Double)">
+            <summary>
+            垂直オフセットの値を設定する。
+            </summary>
+            <param name="offset">包含するビューポートからの垂直方向オフセットの程度。</param>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ItemWidth">
+            <summary>
+            VirtualizingWrapPanel 内に含まれているすべての項目の幅を
+            指定する値を取得、または設定する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ItemHeight">
+            <summary>
+            VirtualizingWrapPanel 内に含まれているすべての項目の高さを
+            指定する値を取得、または設定する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.Orientation">
+            <summary>
+            子コンテンツが配置される方向を指定する値を取得、または設定する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ExtentHeight">
+            <summary>
+            エクステントの縦幅を取得する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ExtentWidth">
+            <summary>
+            エクステントの横幅を取得する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ViewportHeight">
+            <summary>
+            このコンテンツに対するビューポートの縦幅を取得する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ViewportWidth">
+            <summary>
+            このコンテンツに対するビューポートの横幅を取得する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.HorizontalOffset">
+            <summary>
+            スクロールしたコンテンツの水平オフセットを取得する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.VerticalOffset">
+            <summary>
+            スクロールしたコンテンツの垂直オフセットを取得する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ScrollOwner">
+            <summary>
+            スクロール動作を制御する <see cref="T:System.Windows.Controls.ScrollViewer"/> 要素を
+            取得、または設定する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.CanHorizontallyScroll">
+            <summary>
+            水平軸のスクロールが可能かどうかを示す値を取得、または設定する。
+            </summary>
+        </member>
+        <member name="P:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.CanVerticallyScroll">
+            <summary>
+            垂直軸のスクロールが可能かどうかを示す値を取得、または設定する。
+            </summary>
+        </member>
+        <member name="T:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator">
+            <summary>
+            <see cref="T:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel"/> のアイテムを管理する。
+            </summary>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.owner">
+            <summary>
+            アイテムを生成する対象の <see cref="T:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel"/>。
+            </summary>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.generator">
+            <summary>
+            <see cref="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.owner"/> の <see cref="T:System.Windows.Controls.ItemContainerGenerator"/>。
+            </summary>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.generatorTracker">
+            <summary>
+            <see cref="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.generator"/> の生成プロセスの有効期間を追跡するオブジェクト。
+            </summary>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.firstGeneratedIndex">
+            <summary>
+            表示範囲内にある最初の要素のインデックス。
+            </summary>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.lastGeneratedIndex">
+            <summary>
+            表示範囲内にある最後の要素のインデックス。
+            </summary>
+        </member>
+        <member name="F:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.currentGenerateIndex">
+            <summary>
+            次に生成される要素の <see cref="P:System.Windows.Controls.Panel.InternalChildren"/> 内のインデックス。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.#ctor(CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel)">
+            <summary>
+            <see cref="T:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator"/> の新しいインスタンスを生成する。
+            </summary>
+            <param name="owner">アイテムを生成する対象の <see cref="T:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel"/>。</param>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.Finalize">
+            <summary>
+            <see cref="T:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator"/> のインスタンスを破棄する。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.Dispose">
+            <summary>
+            アイテムの生成を終了する。
+            </summary>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.BeginGenerate(System.Int32)">
+            <summary>
+            アイテムの生成を開始する。
+            </summary>
+            <param name="index">アイテムのインデックス。</param>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.GetOrCreateChild(System.Int32)">
+            <summary>
+            必要に応じてアイテムを生成し、指定したインデックスのアイテムを取得する。
+            </summary>
+            <param name="index">取得するアイテムのインデックス。</param>
+            <returns>指定したインデックスのアイテム。</returns>
+        </member>
+        <member name="M:CodePlex.VirtualizingWrapPanel.VirtualizingWrapPanel.ChildGenerator.CleanupChildren">
+            <summary>
+            表示範囲外のアイテムを削除する。
+            </summary>
+        </member>
+    </members>
+</doc>

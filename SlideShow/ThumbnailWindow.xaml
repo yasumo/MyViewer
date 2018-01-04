@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SlideShow"
+        xmlns:vwp="clr-namespace:CodePlex.VirtualizingWrapPanel;assembly=VirtualizingWrapPanel"
         xmlns:converter="clr-namespace:SlideShow.Models"
         mc:Ignorable="d"
         Title="ThumbnailWindow" Height="600" Width="550">
@@ -11,15 +12,23 @@
         <converter:ImageSizeConverter x:Key="imageSizeConverter" />
     </Window.Resources>
     <Grid>
-        <ListBox ItemsSource="{Binding ImagePathListBox}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListBox ItemsSource="{Binding ImagePathListBox}"
+                 VirtualizingPanel.VirtualizationMode="Recycling"
+                 VirtualizingPanel.IsVirtualizing="True"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.CanContentScroll="True"
+                 ScrollViewer.PanningMode="VerticalOnly"
+                 ScrollViewer.IsDeferredScrollingEnabled="True">
             <ListBox.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate >
                     <Image Source="{Binding Converter={StaticResource imageSizeConverter}}"/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel ItemHeight="100" ItemWidth="100" />
+                    <vwp:VirtualizingWrapPanel ItemHeight="100" ItemWidth="100"/>
+                    <!--VirtualizingStackPanel Orientation="Vertical" CanVerticallyScroll="True"/-->
+                    <!--VirtualizingWrapPanel ItemHeight="100" ItemWidth="100" /-->
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
