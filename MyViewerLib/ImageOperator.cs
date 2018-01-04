@@ -18,24 +18,26 @@ namespace MyViewerLib
         {
             this.picBaseDir = picBaseDir;
             this.thumbnailBaseDir = thumbnailBaseDir;
+            if (!Directory.Exists(thumbnailBaseDir))
+            {
+                Directory.CreateDirectory(thumbnailBaseDir);
+            }
         }
 
         //サムネイルが無ければ作成し返す、あればそのまま返す
-        public Image GetThumbnail(string imageFilePath)
+        public string GetThumbnail(string imageFilePath)
         {
             var thumbnailFilePath = CreateThumbnailPath(imageFilePath);
             Image img;
 
-            if (File.Exists(thumbnailFilePath))
-            {
-                img = Image.FromFile(imageFilePath);
-            }
-            else
+            if (!File.Exists(thumbnailFilePath))
             {
                 img = CreateThumbnail(imageFilePath);
                 img.Save(thumbnailFilePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+                img.Dispose();
             }
-            return img;
+           
+            return thumbnailFilePath;
         }
 
 
@@ -53,14 +55,15 @@ namespace MyViewerLib
             // サムネイルの作成
             //TODO:アス比固定縮小
             Image thumbnail = orig.GetThumbnailImage(
-              160, 120, delegate { return false; }, IntPtr.Zero);
+              100, 100, delegate { return false; }, IntPtr.Zero);
+            orig.Dispose();
 
             return thumbnail;
 
         }
 
         //ファイルパスをサムネイルにして全部返す
-        public IEnumerable<Image> CreateAllThumbnail(IEnumerable<string> imageFilePathList)
+        public IEnumerable<string> CreateAllThumbnail(IEnumerable<string> imageFilePathList)
         {
             foreach(var filePath in imageFilePathList)
             {

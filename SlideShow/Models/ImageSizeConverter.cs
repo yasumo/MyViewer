@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using MyViewerLib;
 
 namespace SlideShow.Models
 {
@@ -18,10 +19,15 @@ namespace SlideShow.Models
             {
                 return DependencyProperty.UnsetValue;
             }
+            var picDir = Settings.GetPicDir();
+            var thumbnailDir = Settings.GetThumbDir();
+            var io = new ImageOperator(picDir, thumbnailDir);
+            var thumbnail = io.GetThumbnail(filePath);
+
+            var absPath = System.IO.Path.GetFullPath(thumbnail);
             var image = new BitmapImage();
-            //TODOサムネイルから読む
             image.BeginInit();
-            image.UriSource = new Uri(filePath);
+            image.UriSource = new Uri(absPath);
             image.DecodePixelHeight = 100;
             image.DecodePixelWidth = 100;
             image.EndInit();
