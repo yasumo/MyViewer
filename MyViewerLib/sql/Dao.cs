@@ -353,52 +353,34 @@ namespace MyViewerLib
         public List<Folder> GetFolderIdListHaving(List<string>tagNameList)
         {
             List<Folder> ret = new List<Folder>();
-            foreach(var tagName in tagNameList)
-            {
-                ret = GetFolderListHaving(tagName, ret);
-            }
-            return ret;
-        }
-
-
-
-        //FolderIDリストを持ちかつタグネームを持っているフォルダIDリストをAND条件で絞り込む
-        public List<Folder> GetFolderListHaving(string tagName, List<Folder> folderList)
-        {
-            List<Folder> ret = new List<Folder>();
             Table<Tag> tagTable = dc.GetTable<Tag>();
             Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
             Table<Folder> folderTable = dc.GetTable<Folder>();
 
-            var folderIdList = new List<Int64>();
-            if (folderList != null) {
-                foreach (var folder in folderList)
-                {
-                    folderIdList.Add(folder.FolderId);
-                }
+            var res = from t in tagTable.Where(x => tagNameList.Contains(x.TagName))
+                      from ft in folderTagTable.Where(x => x.TagId == t.TagId)
+                      from f in folderTable.Where(x => x.FolderId == ft.FolderId)
+                      select f;
+
+            var groupby = res.GroupBy(x => x.FolderId)
+                .Select(x => new { FolderId = x.Key, FolderPath = x.Select(y => y.FolderPath).Single(), InsideFileNum = x.Select(y => y.InsideFileNum).Single(), Count = x.Count() })
+                .Where(x => x.Count == tagNameList.Count);
+
+            foreach (var x in groupby)
+            {
+                var retFolder = new Folder();
+                retFolder.FolderId = x.FolderId;
+                retFolder.FolderPath = x.FolderPath;
+                retFolder.InsideFileNum = x.InsideFileNum;
+                ret.Add(retFolder);
             }
 
-
-            if (folderIdList == null || folderIdList.Count == 0)
-            {
-                var res = from t in tagTable.Where(x => x.TagName == tagName)
-                          from ft in folderTagTable.Where(x => x.TagId == t.TagId)
-                          from f in folderTable.Where(x => x.FolderId == ft.FolderId)
-                          select f;
-                ret = new List<Folder>(res);
-            }
-            else
-            {
-                var res = from t in tagTable.Where(x => x.TagName == tagName)
-                          from ft in folderTagTable.Where(x => x.TagId == t.TagId && folderIdList.Contains(x.FolderId))
-                          from f in folderTable.Where(x => x.FolderId == ft.FolderId)
-                          select f;
-                ret = new List<Folder>(res);
-            }
-           
             return ret;
-
         }
+
+
+
+
 
         public void Dispose()
         {

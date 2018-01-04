@@ -21,7 +21,7 @@ namespace MyVierLibTest
         public void DeleteFilesTest()
         {
             var thumbnailDir = TestUtils.GetThumbDir();
-            var count = FolderOperator.DeleteOldFiles(thumbnailDir, 30);
+            var count = FolderOperator.DeleteOldFiles(thumbnailDir, 3);
             Assert.AreEqual(1, count);
         }
 

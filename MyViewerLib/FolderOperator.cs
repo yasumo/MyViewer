@@ -77,7 +77,7 @@ namespace MyViewerLib
         //特定日付より古いファイルを削除する
         public static int DeleteOldFiles(string targetDir, int day)
         {
-            if (!File.Exists(targetDir))
+            if (!Directory.Exists(targetDir))
             {
                 return 0;
             }
