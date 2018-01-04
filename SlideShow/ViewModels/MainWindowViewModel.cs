@@ -13,7 +13,7 @@ namespace SlideShow.ViewModels
     public class MainWindowViewModel : INotifyPropertyChanged
     {
 
-        List<Folder> SearchFolderList = new List<Folder>();
+        List<Folder> SearchedFolderList = new List<Folder>();
         public MainWindow View { get; private set; } = null;
         public event PropertyChangedEventHandler PropertyChanged;
         string searchText;
@@ -59,13 +59,16 @@ namespace SlideShow.ViewModels
 
         private void SlideShowMethod()
         {
-
+            /*
             View.WindowState = System.Windows.WindowState.Normal;
             View.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
             LogText = "aaaa:" + SearchText;
             View.WindowState = System.Windows.WindowState.Maximized;
             View.WindowStyle = System.Windows.WindowStyle.None;
             LogText = "bbbb:" + SearchText;
+            */
+            var win = new SlideShowWindow(SearchedFolderList);
+            win.ShowDialog();
 
         }
         private void SearchMethod()
@@ -86,10 +89,10 @@ namespace SlideShow.ViewModels
 
                     var tags = SearchText.Split(delimiter,StringSplitOptions.None);
                     var tagList = new List<string>(tags);
-                    SearchFolderList = dao.GetFolderIdListHaving(tagList);
+                    SearchedFolderList = dao.GetFolderIdListHaving(tagList);
 
                     var imgnum = 0L;
-                    foreach (var folder in SearchFolderList)
+                    foreach (var folder in SearchedFolderList)
                     {
                         imgnum += folder.InsideFileNum.GetValueOrDefault(0L);
                         LogText += folder.InsideFileNum + ":" + folder.FolderPath + Environment.NewLine;
