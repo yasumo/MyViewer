@@ -20,22 +20,22 @@ namespace SlideShow.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         List<Folder> FolderList;
 
-        private ListCollectionView _PersonListView;
-        public ListCollectionView PersonListView
+        private ListCollectionView imagePathListBox;
+        public ListCollectionView ImagePathListBox
         {
             get
-            { return _PersonListView; }
+            { return imagePathListBox; }
             set
             {
-                if (_PersonListView == value)
+                if (imagePathListBox == value)
                     return;
-                _PersonListView = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PersonListView)));
+                imagePathListBox = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ImagePathListBox)));
             }
         }
 
 
-        private List<string> PersonList;
+        private List<string> ImagePathList;
         public void Initialize(ThumbnailWindow thumbnailWindow,List<Folder> folderList)
         {
             FolderList = folderList;
@@ -43,13 +43,13 @@ namespace SlideShow.ViewModels
             var fo = new FolderOperator();
             var imgFilePathList = fo.GetAllFilePathList(fo.GetFolderPathList(FolderList), SlideShowConst.PIC_EXT_LIST);
 
-            this.PersonList = new List<string>(imgFilePathList);
+            this.ImagePathList = new List<string>(imgFilePathList);
 
-            this.PersonListView = new ListCollectionView(this.PersonList);
-            this.PersonListView.CurrentChanged += PersonListView_CurrentChanged;
+            this.ImagePathListBox = new ListCollectionView(this.ImagePathList);
+            this.ImagePathListBox.CurrentChanged += ImagePathListBox_CurrentChanged;
         }
 
-        void PersonListView_CurrentChanged(object sender, EventArgs e)
+        void ImagePathListBox_CurrentChanged(object sender, EventArgs e)
         {
             var lv = sender as ICollectionView;
             if (lv.CurrentPosition < 0)

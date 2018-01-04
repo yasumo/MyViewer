@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:SlideShow"
         xmlns:converter="clr-namespace:SlideShow.Models"
         mc:Ignorable="d"
-        Title="ThumbnailWindow" Height="300" Width="300">
+        Title="ThumbnailWindow" Height="600" Width="550">
     <Window.Resources>
         <converter:ImageSizeConverter x:Key="imageSizeConverter" />
     </Window.Resources>
     <Grid>
-        <ListBox ItemsSource="{Binding PersonListView}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListBox ItemsSource="{Binding ImagePathListBox}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Image Source="{Binding Converter={StaticResource imageSizeConverter}}"/>
