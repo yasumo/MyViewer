@@ -359,22 +359,18 @@ namespace MyViewerLib
 
             var res = from t in tagTable.Where(x => tagNameList.Contains(x.TagName))
                       from ft in folderTagTable.Where(x => x.TagId == t.TagId)
-                      from f in folderTable.Where(x => x.FolderId == ft.FolderId)
-                      select f;
+                      select ft;
 
             var groupby = res.GroupBy(x => x.FolderId)
-                .Select(x => new { FolderId = x.Key, FolderPath = x.Select(y => y.FolderPath).Single(), InsideFileNum = x.Select(y => y.InsideFileNum).Single(), Count = x.Count() })
+                .Select(x => new { FolderId = x.Key, Count = x.Count() })
                 .Where(x => x.Count == tagNameList.Count);
 
-            foreach (var x in groupby)
-            {
-                var retFolder = new Folder();
-                retFolder.FolderId = x.FolderId;
-                retFolder.FolderPath = x.FolderPath;
-                retFolder.InsideFileNum = x.InsideFileNum;
-                ret.Add(retFolder);
-            }
+            var target = from g in groupby
+                       from f in folderTable.Where(x => g.FolderId == x.FolderId)
+                       select f;
 
+
+            ret = new List<Folder>(target);
             return ret;
         }
 
