@@ -78,6 +78,7 @@ namespace SlideShow.ViewModels
                 LogText = "";
                 if (SearchText.Trim().Length == 0)
                 {
+                    //空の時はタグ名全部返す
                     foreach (var tagAndNum in dao.GetAllTagAndNum())
                     {
                         LogText += tagAndNum.tagName + ":" + tagAndNum.tagNum + Environment.NewLine;
@@ -85,6 +86,7 @@ namespace SlideShow.ViewModels
                 }
                 else
                 {
+                    //値があるときはディレクトリを返す
                     string[] delimiter = { "," };
 
                     var tags = SearchText.Split(delimiter,StringSplitOptions.None);
@@ -92,13 +94,14 @@ namespace SlideShow.ViewModels
                     SearchedFolderList = dao.GetFolderIdListHaving(tagList);
 
                     var imgnum = 0L;
+                    var tmpText = "";
                     foreach (var folder in SearchedFolderList)
                     {
                         imgnum += folder.InsideFileNum.GetValueOrDefault(0L);
-                        LogText += folder.InsideFileNum + ":" + folder.FolderPath + Environment.NewLine;
+                        tmpText += folder.InsideFileNum + ":" + folder.FolderPath + Environment.NewLine;
                     }
-                    LogText = imgnum.ToString() + Environment.NewLine + LogText;
-
+                    tmpText = imgnum.ToString() + Environment.NewLine + tmpText;
+                    LogText = tmpText;
                 }
             }
         }

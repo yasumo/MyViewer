@@ -80,6 +80,7 @@ namespace MyViewerLib
         //ファイルパスからサムネイルのパスを作成
         public string CreateThumbnailPath(string filePath)
         {
+            //TODO:サムネディレクトリの変更(頭2桁で分けたい)
             var ext = Path.GetExtension(filePath);
             var fileName = CalcMd5(filePath) + ext;
             var retFilePath = this.thumbnailBaseDir + Path.DirectorySeparatorChar + fileName;
