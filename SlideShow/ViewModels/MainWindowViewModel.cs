@@ -51,23 +51,45 @@ namespace SlideShow.ViewModels
             SlideShow = new SimpleCommand(SlideShowMethod);
             Search = new SimpleCommand(SearchMethod);
             CreateIndex = new SimpleCommand(CreateIndexMethod);
+            SearchText = "";
+            LogText = "";
         }
 
         private void SlideShowMethod()
         {
-            //var view = ApplicationView.GetForCurrentView();
-            //view.TryEnterFullScreenMode();
             View.WindowState = System.Windows.WindowState.Normal;
             View.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
             LogText = "aaaa:" + SearchText;
-        }
-        private void SearchMethod()
-        {
-            //var view = ApplicationView.GetForCurrentView();
-            //view.ExitFullScreenMode();
             View.WindowState = System.Windows.WindowState.Maximized;
             View.WindowStyle = System.Windows.WindowStyle.None;
             LogText = "bbbb:" + SearchText;
+
+        }
+        private void SearchMethod()
+        {
+            using (var dao = new Dao(Settings.GetSqliteFilePath()))
+            {
+                LogText = "";
+                if (SearchText.Trim().Length == 0)
+                {
+                    foreach (var tagAndNum in dao.GetAllTagAndNum())
+                    {
+                        LogText += tagAndNum.tagName + ":" + tagAndNum.tagNum + Environment.NewLine;
+                    }
+                }
+                else
+                {
+                    string[] delimiter = { "," };
+
+                    var tags = SearchText.Split(delimiter,StringSplitOptions.None);
+                    var tagList = new List<string>(tags);
+                    foreach (var tagAndNum in dao.GetOtherTag(tagList))
+                    {
+                        LogText += tagAndNum.tagName + ":" + tagAndNum.tagNum + Environment.NewLine;
+                    }
+
+                }
+            }
         }
 
 

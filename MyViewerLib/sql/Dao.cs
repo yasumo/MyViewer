@@ -18,6 +18,7 @@ namespace MyViewerLib
         DataContext dc;
         DbTransaction transaction;
         bool ConnectionOpen = false;
+        bool TransactionOpen = false;
 
         public Dao(string datasourcePath)
         {
@@ -29,18 +30,30 @@ namespace MyViewerLib
             ConnectionOpen = true;
             dc = new DataContext(c);
         }
+        private SQLiteConnectionStringBuilder createConnectionString()
+        {
+            return new SQLiteConnectionStringBuilder
+            {
+                DataSource = datasourcePath
+            };
+        }
+
+        //transaction関連
         public void StartTransaction()
         {
+            TransactionOpen = true;
             transaction = c.BeginTransaction();
         }
+        //transaction関連
         public void Commit()
         {
+            TransactionOpen = false;
             transaction.Commit();
             transaction.Dispose();
         }
 
 
-
+        //dispose関連
         public void Close()
         {
             if (dc != null) {
@@ -51,16 +64,12 @@ namespace MyViewerLib
                 c.Dispose();
                 ConnectionOpen = false;
             }
-        }
-
-        private SQLiteConnectionStringBuilder createConnectionString()
-        {
-            return new SQLiteConnectionStringBuilder
+            if (TransactionOpen)
             {
-                DataSource = datasourcePath
-            };
-
+                Commit();
+            }
         }
+
 
         //フォルダテーブルとフォルダタグテーブルを消す
         public void ClearTmpTable()
@@ -100,7 +109,7 @@ namespace MyViewerLib
             MyExecuteCommand(sql);
             return id;
         }
-
+        //複数インサート
         public List<long> InsertMulutiFolderTable(List<string> folderPathList, List<long> insideFileNumList)
         {
             var retIdList = new List<long>();
@@ -194,6 +203,39 @@ namespace MyViewerLib
             return ret;
         }
 
+        //すべてのタグと、それに紐付くファイル数を取得
+        public List<(Int64 tagId, string tagName, long tagNum)> GetAllTagAndNum()
+        {
+            var ret = new List<(Int64 tagId,string tagName, long tagNum)>();
+            Table<Tag> tagTable = dc.GetTable<Tag>();
+            Table<Folder> folderTable = dc.GetTable<Folder>();
+            Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
+            var res = (from ft in folderTagTable
+                       from t in tagTable.Where(x => x.TagId == ft.TagId)
+                       from f in folderTable.Where(x => x.FolderId == ft.FolderId)
+
+                       select new
+                       {
+                           t.TagId,
+                           t.TagName,
+                           f.InsideFileNum
+                       });
+
+            var groupby = res.GroupBy(x => x.TagId)
+                             .Select(x => new { TagId = x.Key, TagName = x.Select(y => y.TagName).Single(), Sum = x.Sum(y => (long?)y.InsideFileNum) })
+                             .OrderByDescending(x => x.Sum);
+
+            foreach (var x in groupby)
+            {
+                var tagId = x.TagId;
+                var tagName = x.TagName.ToString();
+                var tagNum = x.Sum.GetValueOrDefault(0L);
+                ret.Add((tagId, tagName, tagNum));
+            }
+
+            return ret;
+        }
+
         //フォルダIDリストが持ってるファイルの総数取得
         public long GetSumOfFileNum(List<Int64> folderIdList)
         {
@@ -228,26 +270,15 @@ namespace MyViewerLib
         //GetOtherTagから呼ばれるやつ
         private List<Int64> GetOtherTagIdList(List<Int64> folderIdList,List<string>tagNameList)
         {
-            var cs = createConnectionString();
             List<Int64> ret;
-            using (SQLiteConnection c = new SQLiteConnection(cs.ToString()))
-            {
-                
-                c.Open();
 
-                
-                using (DataContext dc = new DataContext(c))
-                {
-                    Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
-                    Table<Tag> tagTable = dc.GetTable<Tag>();
+            Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
+            Table<Tag> tagTable = dc.GetTable<Tag>();
 
-                    var res = (from tf in folderTagTable.Where(x => folderIdList.Contains(x.FolderId))
-                               from t in tagTable.Where(x => tf.TagId == x.TagId && !tagNameList.Contains(x.TagName))
-                               select tf.TagId).Distinct();
-                    ret = new List<Int64>(res);
-                }
-                c.Close();
-            }
+            var res = (from tf in folderTagTable.Where(x => folderIdList.Contains(x.FolderId))
+                       from t in tagTable.Where(x => tf.TagId == x.TagId && !tagNameList.Contains(x.TagName))
+                       select tf.TagId).Distinct();
+            ret = new List<Int64>(res);
 
             return ret;
         }
