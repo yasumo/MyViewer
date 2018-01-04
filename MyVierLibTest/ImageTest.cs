@@ -36,7 +36,7 @@ namespace MyVierLibTest
             var thumbnailList = io.CreateAllThumbnail(filePathList);
             foreach (var thumbnail in thumbnailList)
             {
-                Console.WriteLine(thumbnail.Height);
+                Console.WriteLine(thumbnail);
             }
 
         }
