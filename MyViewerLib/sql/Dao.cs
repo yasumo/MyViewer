@@ -269,72 +269,48 @@ namespace MyViewerLib
 
 
         //引数のフォルダIDが持つ、引数のタグネーム以外の
-        private List<Int64> GetOtherTagIdList(List<Folder> folderList,List<string>tagNameList)
+        private IQueryable<Tag> GetOtherTagIdList(IQueryable<Folder> folderListQuery,List<string>tagNameList)
         {
             List<Int64> ret = new List<Int64>();
 
             Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
             Table<Tag> tagTable = dc.GetTable<Tag>();
 
-            var folderIdListTmp = new List<Int64>();
-            foreach (var folder in folderList)
-            {
-                folderIdListTmp.Add(folder.FolderId);
-                if (folderIdListTmp.Count > 500)
-                {
-                    var res = (from tf in folderTagTable.Where(x => folderIdListTmp.Contains(x.FolderId))
-                               from t in tagTable.Where(x => tf.TagId == x.TagId && !tagNameList.Contains(x.TagName))
-                               select tf.TagId).Distinct();
-                    ret.AddRange(new List<Int64>(res));
-                    folderIdListTmp = new List<Int64>();
-                }
-            }
-            if (folderIdListTmp.Count > 0)
-            {
-                var res = (from tf in folderTagTable.Where(x => folderIdListTmp.Contains(x.FolderId))
-                           from t in tagTable.Where(x => tf.TagId == x.TagId && !tagNameList.Contains(x.TagName))
-                           select tf.TagId).Distinct();
-                ret.AddRange(new List<Int64>(res));
-            }
+            var res = (from tf in folderTagTable
+                       from f in folderListQuery.Where(x=> x.FolderId==tf.FolderId)
+                       from t in tagTable.Where(x => tf.TagId == x.TagId && !tagNameList.Contains(x.TagName))
+                       select t).Distinct();
             
-            ret.Distinct();
 
-            return ret;
+
+            return res;
         }
 
         //タグネームを持っているやつが持っている他のタグのリストを返す
         public List<( Int64 tagId, string tagName, Int64 tagNum)> GetOtherTag(List<string> tagNameList)
         {
-            var baseFolderList = GetFolderIdListHaving(tagNameList);
-            var otherTagIdList = GetOtherTagIdList(baseFolderList, tagNameList);
-
-            var baseFolderIdList = new List<Int64>();
-            foreach (var folder in baseFolderList)
-            {
-                baseFolderIdList.Add(folder.FolderId);
-            }
-
+            var baseFolderListQuery = GetFolderIdListHavingQuery(tagNameList);
+            var otherTagListQuery = GetOtherTagIdList(baseFolderListQuery, tagNameList);
 
             var ret = new List<(Int64,string, Int64)>();
             Table<Tag> tagTable = dc.GetTable<Tag>();
             Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
             Table<Folder> folderTable = dc.GetTable<Folder>();
-            var res = (from ft in folderTagTable.Where(x => otherTagIdList.Contains(x.TagId) && baseFolderIdList.Contains(x.FolderId))
-                       from t in tagTable.Where(x => x.TagId == ft.TagId)
+            var res = (from otherTag in otherTagListQuery
+                       from ft in folderTagTable.Where(x => x.TagId == otherTag.TagId)
+                       from baseFolderList in baseFolderListQuery.Where(x=>x.FolderId==ft.FolderId)
                        from f in folderTable.Where(x => x.FolderId == ft.FolderId)
 
                        select new
                        {
-                           t.TagId,
-                           t.TagName,
+                           otherTag.TagId,
+                           otherTag.TagName,
                            f.InsideFileNum
                        });
 
             var groupby = res.GroupBy(x => x.TagId)
                              .Select(x => new { TagId = x.Key, TagName = x.Select(y => y.TagName).Single(), Sum = x.Sum(y => (long?)y.InsideFileNum) })
                              .OrderByDescending(x => x.Sum);
-
-
 
             foreach (var x in groupby)
             {
@@ -353,6 +329,53 @@ namespace MyViewerLib
         public List<Folder> GetFolderIdListHaving(List<string>tagNameList)
         {
             List<Folder> ret = new List<Folder>();
+            var target = GetFolderIdListHavingQuery(tagNameList);
+
+            ret = new List<Folder>(target);
+            return ret;
+        }
+
+        public List<(Int64 tagId, string tagName, Int64 tagNum)> GetRelationTagList(List<string> tagNameList)
+        {
+            var ret = new List<(Int64, string, Int64)>();
+
+            var folderListQuery = GetFolderIdListHavingQuery(tagNameList);
+            Table<Tag> tagTable = dc.GetTable<Tag>();
+            Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
+            Table<Folder> folderTable = dc.GetTable<Folder>();
+            var res = (
+                       from fl in folderListQuery
+                       from ft in folderTagTable.Where(x => x.FolderId == fl.FolderId)
+                       from f in folderTable.Where(x => x.FolderId == ft.FolderId)
+                       from t in tagTable.Where(x=>x.TagId==ft.TagId)
+
+                       select new
+                       {
+                           t.TagId,
+                           t.TagName,
+                           f.InsideFileNum
+                       });
+
+            var groupby = res.GroupBy(x => x.TagId)
+                             .Select(x => new { TagId = x.Key, TagName = x.Select(y => y.TagName).Single(), Sum = x.Sum(y => (long?)y.InsideFileNum) })
+                             .OrderByDescending(x => x.Sum);
+
+            foreach (var x in groupby)
+            {
+                var tagId = x.TagId;
+                var tagName = x.TagName.ToString();
+                var tagNum = x.Sum.GetValueOrDefault(0L);
+                ret.Add((tagId, tagName, tagNum));
+            }
+
+
+            return ret;
+
+        }
+
+
+        private IQueryable<Folder> GetFolderIdListHavingQuery(List<string> tagNameList)
+        {
             Table<Tag> tagTable = dc.GetTable<Tag>();
             Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
             Table<Folder> folderTable = dc.GetTable<Folder>();
@@ -366,16 +389,11 @@ namespace MyViewerLib
                 .Where(x => x.Count == tagNameList.Count);
 
             var target = from g in groupby
-                       from f in folderTable.Where(x => g.FolderId == x.FolderId)
-                       select f;
+                         from f in folderTable.Where(x => g.FolderId == x.FolderId)
+                         select f;
 
-
-            ret = new List<Folder>(target);
-            return ret;
+            return target;
         }
-
-
-
 
 
         public void Dispose()
