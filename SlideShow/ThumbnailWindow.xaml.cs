@@ -22,10 +22,10 @@ namespace SlideShow
     {
         public ViewModels.ThumbnailViewModel ViewModel { get; private set; } = new ViewModels.ThumbnailViewModel();
 
-        public ThumbnailWindow()
+        public ThumbnailWindow(List<Folder> folderList)
         {
             InitializeComponent();
-            ViewModel.Initialize(this);
+            ViewModel.Initialize(this, folderList);
             this.DataContext = ViewModel;
         }
     }

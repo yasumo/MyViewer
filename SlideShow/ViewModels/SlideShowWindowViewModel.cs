@@ -78,25 +78,18 @@ namespace SlideShow.ViewModels
             View = slideShowWindow;
             View.WindowState = System.Windows.WindowState.Maximized;
             View.WindowStyle = System.Windows.WindowStyle.None;
-            var fo = new FolderOperator();
 
             NextImgCommand = new SimpleCommand(NextImgMethod);
             PrevImgCommand = new SimpleCommand(PrevImgMethod);
 
-            var imgFilePathList = fo.GetAllFilePathList(GetFolderPathList(FolderList), SlideShowConst.PIC_EXT_LIST);
+            var fo = new FolderOperator();
+            var imgFilePathList = fo.GetAllFilePathList(fo.GetFolderPathList(FolderList), SlideShowConst.PIC_EXT_LIST);
             FilePathList = new List<string>(imgFilePathList.OrderBy(i => Guid.NewGuid()));
             displayImage();
 
         }
 
-        private IEnumerable<string> GetFolderPathList(List<Folder> folderList)
-        {
-            foreach(var folder in folderList)
-            {
-                yield return folder.FolderPath;
-            }
 
-        }
 
     }
     

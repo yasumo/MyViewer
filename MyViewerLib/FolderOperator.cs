@@ -97,6 +97,14 @@ namespace MyViewerLib
             return deleteCount;
         }
 
+        //folderからfolderpathlistを作って返す
+        public IEnumerable<string> GetFolderPathList(List<Folder> folderList)
+        {
+            foreach (var folder in folderList)
+            {
+                yield return folder.FolderPath;
+            }
+        }
 
     }
 }

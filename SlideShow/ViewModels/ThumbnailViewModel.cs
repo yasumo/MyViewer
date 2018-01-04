@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MyViewerLib;
+using SlideShow.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,6 +13,7 @@ namespace SlideShow.ViewModels
     public class ThumbnailViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        List<Folder> FolderList;
 
         private ListCollectionView _PersonListView;
         public ListCollectionView PersonListView
@@ -26,14 +29,16 @@ namespace SlideShow.ViewModels
             }
         }
 
-        private List<string> PersonList;
-        public void Initialize(ThumbnailWindow thumbnailWindow)
-        {
 
-            this.PersonList = new List<string>()
-            {
-            "佐藤","高橋","渡辺","山本","小林","小林","小林","小林","小林","小林","小林","小林","小林","小林","小林","小林","小林","小林","小林","小林"
-            };
+        private List<string> PersonList;
+        public void Initialize(ThumbnailWindow thumbnailWindow,List<Folder> folderList)
+        {
+            FolderList = folderList;
+
+            var fo = new FolderOperator();
+            var imgFilePathList = fo.GetAllFilePathList(fo.GetFolderPathList(FolderList), SlideShowConst.PIC_EXT_LIST);
+
+            this.PersonList = new List<string>(imgFilePathList);
 
             this.PersonListView = new ListCollectionView(this.PersonList);
             this.PersonListView.CurrentChanged += PersonListView_CurrentChanged;

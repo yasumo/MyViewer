@@ -4,9 +4,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SlideShow"
+        xmlns:converter="clr-namespace:SlideShow.Models"
         mc:Ignorable="d"
         Title="ThumbnailWindow" Height="300" Width="300">
+    <Window.Resources>
+        <converter:ImageSizeConverter x:Key="imageSizeConverter" />
+    </Window.Resources>
     <Grid>
-        <ListBox ItemsSource="{Binding PersonListView}" />
+        <ListBox ItemsSource="{Binding PersonListView}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding Converter={StaticResource imageSizeConverter}}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel ItemHeight="100" ItemWidth="100" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
     </Grid>
 </Window>

@@ -67,7 +67,7 @@ namespace SlideShow.ViewModels
 
         private void ThumbnailMethod()
         {
-            var win = new ThumbnailWindow();
+            var win = new ThumbnailWindow(SearchedFolderList);
             win.ShowDialog();
         }
 
