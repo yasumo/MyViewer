@@ -54,7 +54,7 @@ namespace SlideShow.ViewModels
 
         private void displayImage()
         {
-            if (FilePathList.Count >= 0)
+            if (FilePathList.Count > 0)
             {
                 if (NowFilePathNum <= 0)
                 {

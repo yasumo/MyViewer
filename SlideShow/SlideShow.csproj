@@ -87,9 +87,13 @@
     <Compile Include="SlideShowWindow.xaml.cs">
       <DependentUpon>SlideShowWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ThumbnailWindow.xaml.cs">
+      <DependentUpon>ThumbnailWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\SimpleCommand.cs" />
     <Compile Include="ViewModels\SlideShowWindowViewModel.cs" />
+    <Compile Include="ViewModels\ThumbnailViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,6 +107,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SlideShowWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThumbnailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

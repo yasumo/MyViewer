@@ -44,6 +44,7 @@ namespace SlideShow.ViewModels
         }
 
         public ICommand SlideShow { get; private set; }
+        public ICommand Thumbnail { get; private set; }
         public ICommand Search { get; private set; }
         public ICommand CreateIndex { get; private set; }
 
@@ -51,6 +52,7 @@ namespace SlideShow.ViewModels
         {
             View = mainWindow;
             SlideShow = new SimpleCommand(SlideShowMethod);
+            Thumbnail = new SimpleCommand(ThumbnailMethod);
             Search = new SimpleCommand(SearchMethod);
             CreateIndex = new SimpleCommand(CreateIndexMethod);
             SearchText = "";
@@ -61,8 +63,14 @@ namespace SlideShow.ViewModels
         {
             var win = new SlideShowWindow(SearchedFolderList);
             win.ShowDialog();
-
         }
+
+        private void ThumbnailMethod()
+        {
+            var win = new ThumbnailWindow();
+            win.ShowDialog();
+        }
+
         private void SearchMethod()
         {
             using (var dao = new Dao(Settings.GetSqliteFilePath()))
