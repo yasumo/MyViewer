@@ -59,6 +59,7 @@ namespace SlideShow.ViewModels
 
         private void SlideShowMethod()
         {
+
             View.WindowState = System.Windows.WindowState.Normal;
             View.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
             LogText = "aaaa:" + SearchText;
