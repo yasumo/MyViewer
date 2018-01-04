@@ -3,10 +3,15 @@ using SlideShow.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace SlideShow.ViewModels
 {
@@ -52,12 +57,41 @@ namespace SlideShow.ViewModels
                 System.Diagnostics.Trace.WriteLine("選択無し");
                 return;
             }
-            var name = lv.CurrentItem as string;
-            System.Diagnostics.Trace.WriteLine(
-                string.Format("CurrentChanged:位置={0},名前={1}",
-                lv.CurrentPosition,
-                name));
+
+            //クリップボードに画像をコピー
+            var imgpath = lv.CurrentItem as string;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                //画像を作成する
+                Bitmap bitmap = new Bitmap(imgpath);
+                // You need to specify the image format to fill the stream. 
+                // I'm assuming it is PNG
+                bitmap.Save(memoryStream, ImageFormat.Png);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+
+                //画像データをクリップボードにコピーする
+                Clipboard.SetImage(CreateBitmapSourceFromBitmap(memoryStream));
+
+                //後片付け
+                bitmap.Dispose();
+
+            }
+
         }
 
+        private static BitmapSource CreateBitmapSourceFromBitmap(Stream stream)
+        {
+            var bitmapDecoder = BitmapDecoder.Create(
+                stream,
+                BitmapCreateOptions.PreservePixelFormat,
+                BitmapCacheOption.OnLoad);
+
+            // This will disconnect the stream from the image completely...
+            var writable = new WriteableBitmap(bitmapDecoder.Frames.Single());
+            writable.Freeze();
+
+            return writable;
+        }
     }
 }
