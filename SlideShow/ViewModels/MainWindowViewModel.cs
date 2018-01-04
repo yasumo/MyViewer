@@ -12,6 +12,8 @@ namespace SlideShow.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
+
+        List<Folder> SearchFolderList = new List<Folder>();
         public MainWindow View { get; private set; } = null;
         public event PropertyChangedEventHandler PropertyChanged;
         string searchText;
@@ -83,12 +85,15 @@ namespace SlideShow.ViewModels
 
                     var tags = SearchText.Split(delimiter,StringSplitOptions.None);
                     var tagList = new List<string>(tags);
-                    var folderList = dao.GetFolderIdListHaving(tagList);
+                    SearchFolderList = dao.GetFolderIdListHaving(tagList);
 
-                    foreach (var folder in folderList)
+                    var imgnum = 0L;
+                    foreach (var folder in SearchFolderList)
                     {
+                        imgnum += folder.InsideFileNum.GetValueOrDefault(0L);
                         LogText += folder.InsideFileNum + ":" + folder.FolderPath + Environment.NewLine;
                     }
+                    LogText = imgnum.ToString() + Environment.NewLine + LogText;
 
                 }
             }
