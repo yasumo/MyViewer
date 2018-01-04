@@ -10,6 +10,13 @@
     <Window.Resources>
         <converter:WinFormBitmapConverter x:Key="BitmapConverter"/>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="J" Command="{Binding NextImgCommand}"/>
+        <KeyBinding Key="Right" Command="{Binding NextImgCommand}"/>
+        <KeyBinding Key="K" Command="{Binding PrevImgCommand}"/>
+        <KeyBinding Key="Left" Command="{Binding PrevImgCommand}"/>
+    </Window.InputBindings>
+
     <Grid>
         <Image Source="{Binding IconImageSource, Converter={StaticResource BitmapConverter}, Mode=OneWay}" />
     </Grid>

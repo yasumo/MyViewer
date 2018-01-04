@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace.SlideShow"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="600">
+
+
     <StackPanel
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
