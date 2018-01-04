@@ -22,7 +22,8 @@ namespace MyViewerLib
                 var tag = m.Groups["tag"].Value;
                 ret.Add(tag);
             }
-            return ret;
+
+            return new List<string>(ret.Distinct());
         }
 
 

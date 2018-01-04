@@ -80,7 +80,7 @@ namespace SlideShow.ViewModels
                     string[] delimiter = { "," };
 
                     var tags = SearchText.Split(delimiter,StringSplitOptions.None);
-                    var tagList = new List<string>(tags);
+                    var tagList = new List<string>(tags.Distinct());
                     SearchedFolderList = dao.GetFolderIdListHaving(tagList);
 
                     var imgnum = 0L;
