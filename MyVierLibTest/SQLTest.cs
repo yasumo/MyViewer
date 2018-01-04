@@ -140,36 +140,41 @@ namespace MyVierLibTest
             using (var dao = new Dao(TestUtils.GetWriteSqliteFilePath()))
             {
                 {
-                    var ret = dao.GetFolderIdListHaving(@"あああ", null);
+                    var ret = dao.GetFolderListHaving(@"あああ", null);
                     Assert.AreEqual(3, ret.Count);
-                    Assert.AreEqual(0, ret[0]);
-                    Assert.AreEqual(4, ret[1]);
-                    Assert.AreEqual(2, ret[2]);
+                    Assert.AreEqual(0, ret[0].FolderId);
+                    Assert.AreEqual(4, ret[1].FolderId);
+                    Assert.AreEqual(2, ret[2].FolderId);
                 }
                 {
-                    var ret = dao.GetFolderIdListHaving(@"hoge", null);
+                    var ret = dao.GetFolderListHaving(@"hoge", null);
                     Assert.AreEqual(1, ret.Count);
-                    Assert.AreEqual(0, ret[0]);
+                    Assert.AreEqual(0, ret[0].FolderId);
                 }
                 {
-                    var ret = dao.GetFolderIdListHaving(@"99999999", null);
+                    var ret = dao.GetFolderListHaving(@"99999999", null);
                     Assert.AreEqual(0, ret.Count);
                 }
                 {
-                    var ret = dao.GetFolderIdListHaving(@"仮名", null);
+                    var ret = dao.GetFolderListHaving(@"仮名", null);
                     Assert.AreEqual(0, ret.Count);
                 }
 
                 {
-                    var ret = dao.GetFolderIdListHaving(@"hoge", new List<Int64> { 0, 4 });
+                    var folder1 = new Folder();
+                    var folder2 = new Folder();
+                    folder1.FolderId = 0;
+                    folder2.FolderId = 4;
+
+                    var ret = dao.GetFolderListHaving(@"hoge", new List<Folder> { folder1,folder2});
                     Assert.AreEqual(1, ret.Count);
-                    Assert.AreEqual(0, ret[0]);
+                    Assert.AreEqual(0, ret[0].FolderId);
                 }
 
                 {
                     var ret = dao.GetFolderIdListHaving(new List<string> { @"あああ", @"hoge" });
                     Assert.AreEqual(1, ret.Count);
-                    Assert.AreEqual(0, ret[0]);
+                    Assert.AreEqual(0, ret[0].FolderId);
                 }
             }
         }

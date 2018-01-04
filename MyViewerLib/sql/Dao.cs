@@ -267,18 +267,37 @@ namespace MyViewerLib
             return ret;
         }
 
-        //GetOtherTagから呼ばれるやつ
-        private List<Int64> GetOtherTagIdList(List<Int64> folderIdList,List<string>tagNameList)
+
+        //引数のフォルダIDが持つ、引数のタグネーム以外の
+        private List<Int64> GetOtherTagIdList(List<Folder> folderList,List<string>tagNameList)
         {
-            List<Int64> ret;
+            List<Int64> ret = new List<Int64>();
 
             Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
             Table<Tag> tagTable = dc.GetTable<Tag>();
 
-            var res = (from tf in folderTagTable.Where(x => folderIdList.Contains(x.FolderId))
-                       from t in tagTable.Where(x => tf.TagId == x.TagId && !tagNameList.Contains(x.TagName))
-                       select tf.TagId).Distinct();
-            ret = new List<Int64>(res);
+            var folderIdListTmp = new List<Int64>();
+            foreach (var folder in folderList)
+            {
+                folderIdListTmp.Add(folder.FolderId);
+                if (folderIdListTmp.Count > 500)
+                {
+                    var res = (from tf in folderTagTable.Where(x => folderIdListTmp.Contains(x.FolderId))
+                               from t in tagTable.Where(x => tf.TagId == x.TagId && !tagNameList.Contains(x.TagName))
+                               select tf.TagId).Distinct();
+                    ret.AddRange(new List<Int64>(res));
+                    folderIdListTmp = new List<Int64>();
+                }
+            }
+            if (folderIdListTmp.Count > 0)
+            {
+                var res = (from tf in folderTagTable.Where(x => folderIdListTmp.Contains(x.FolderId))
+                           from t in tagTable.Where(x => tf.TagId == x.TagId && !tagNameList.Contains(x.TagName))
+                           select tf.TagId).Distinct();
+                ret.AddRange(new List<Int64>(res));
+            }
+            
+            ret.Distinct();
 
             return ret;
         }
@@ -286,8 +305,15 @@ namespace MyViewerLib
         //タグネームを持っているやつが持っている他のタグのリストを返す
         public List<( Int64 tagId, string tagName, Int64 tagNum)> GetOtherTag(List<string> tagNameList)
         {
-            var baseFolderIdList = GetFolderIdListHaving(tagNameList);
-            var otherTagIdList = GetOtherTagIdList(baseFolderIdList, tagNameList);
+            var baseFolderList = GetFolderIdListHaving(tagNameList);
+            var otherTagIdList = GetOtherTagIdList(baseFolderList, tagNameList);
+
+            var baseFolderIdList = new List<Int64>();
+            foreach (var folder in baseFolderList)
+            {
+                baseFolderIdList.Add(folder.FolderId);
+            }
+
 
             var ret = new List<(Int64,string, Int64)>();
             Table<Tag> tagTable = dc.GetTable<Tag>();
@@ -324,50 +350,54 @@ namespace MyViewerLib
         }
 
         //タグネームのリストをすべて持っているフォルダID
-        public List<Int64> GetFolderIdListHaving(List<string>tagNameList)
+        public List<Folder> GetFolderIdListHaving(List<string>tagNameList)
         {
-            List<Int64> ret = null;
+            List<Folder> ret = new List<Folder>();
             foreach(var tagName in tagNameList)
             {
-                ret = GetFolderIdListHaving(tagName, ret);
+                ret = GetFolderListHaving(tagName, ret);
             }
             return ret;
         }
 
+
+
         //FolderIDリストを持ちかつタグネームを持っているフォルダIDリストをAND条件で絞り込む
-        public List<Int64> GetFolderIdListHaving(string tagName, List<Int64> folderIdList)
+        public List<Folder> GetFolderListHaving(string tagName, List<Folder> folderList)
         {
-            List<Int64> ret = new List<Int64>();
+            List<Folder> ret = new List<Folder>();
             Table<Tag> tagTable = dc.GetTable<Tag>();
             Table<FolderTag> folderTagTable = dc.GetTable<FolderTag>();
+            Table<Folder> folderTable = dc.GetTable<Folder>();
+
+            var folderIdList = new List<Int64>();
+            if (folderList != null) {
+                foreach (var folder in folderList)
+                {
+                    folderIdList.Add(folder.FolderId);
+                }
+            }
+
 
             if (folderIdList == null || folderIdList.Count == 0)
             {
                 var res = from t in tagTable.Where(x => x.TagName == tagName)
                           from ft in folderTagTable.Where(x => x.TagId == t.TagId)
-                          select new
-                          {
-                              ft.FolderId,
-                          };
-                foreach (var x in res)
-                {
-                    ret.Add(x.FolderId);
-                }
+                          from f in folderTable.Where(x => x.FolderId == ft.FolderId)
+                          select f;
+                ret = new List<Folder>(res);
             }
             else
             {
                 var res = from t in tagTable.Where(x => x.TagName == tagName)
                           from ft in folderTagTable.Where(x => x.TagId == t.TagId && folderIdList.Contains(x.FolderId))
-                          select new
-                          {
-                              ft.FolderId,
-                          };
-                foreach (var x in res)
-                {
-                    ret.Add(x.FolderId);
-                }
+                          from f in folderTable.Where(x => x.FolderId == ft.FolderId)
+                          select f;
+                ret = new List<Folder>(res);
             }
+           
             return ret;
+
         }
 
         public void Dispose()

@@ -83,9 +83,11 @@ namespace SlideShow.ViewModels
 
                     var tags = SearchText.Split(delimiter,StringSplitOptions.None);
                     var tagList = new List<string>(tags);
-                    foreach (var tagAndNum in dao.GetOtherTag(tagList))
+                    var folderList = dao.GetFolderIdListHaving(tagList);
+
+                    foreach (var folder in folderList)
                     {
-                        LogText += tagAndNum.tagName + ":" + tagAndNum.tagNum + Environment.NewLine;
+                        LogText += folder.InsideFileNum + ":" + folder.FolderPath + Environment.NewLine;
                     }
 
                 }
