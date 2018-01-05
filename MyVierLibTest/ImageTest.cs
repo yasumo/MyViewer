@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyViewerLib;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.IO;
 
 namespace MyVierLibTest
 {
@@ -17,8 +17,9 @@ namespace MyVierLibTest
             var thumbnailDir = TestUtils.GetThumbDir();
 
             var io = new ImageOperator(picDir,thumbnailDir);
-            var thumbnailFilePath = io.CreateThumbnailPath(@"E:\aaa\bbb\[aaa][bbb]\tehos.jpg");
-            Assert.AreEqual("E:\\WindowsWorkFiles\\Documents\\visual studio 2017\\Projects\\MyViewer\\MyVierLibTest\\bin\\Debug\\thumbnailtest\\bb18be855d0e7bdddcbf557645307638.jpg", thumbnailFilePath);
+            var (folderPath,fileName) = io.CreateThumbnailPath(@"E:\aaa\bbb\[aaa][bbb]\tehos.jpg");
+            var thumbnailFilePath = folderPath + Path.DirectorySeparatorChar + fileName;
+            Assert.AreEqual("E:\\WindowsWorkFiles\\Documents\\visual studio 2017\\Projects\\MyViewer\\MyVierLibTest\\bin\\Debug\\thumbnailtest\\bb\\bb18be855d0e7bdddcbf557645307638.jpg", thumbnailFilePath);
             
         }
 

@@ -27,13 +27,19 @@ namespace MyViewerLib
         //サムネイルが無ければ作成し返す、あればそのまま返す
         public string GetThumbnail(string imageFilePath)
         {
-            var thumbnailFilePath = CreateThumbnailPath(imageFilePath);
-            Image img;
+            var (folderPath, fileName) = CreateThumbnailPath(imageFilePath);
+            var thumbnailFilePath = folderPath + Path.DirectorySeparatorChar + fileName;
 
             if (!File.Exists(thumbnailFilePath))
             {
+                Image img;
                 img = CreateThumbnail(imageFilePath);
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
                 img.Save(thumbnailFilePath, System.Drawing.Imaging.ImageFormat.Jpeg);
+
                 img.Dispose();
             }
            
@@ -78,13 +84,12 @@ namespace MyViewerLib
         }
 
         //ファイルパスからサムネイルのパスを作成
-        public string CreateThumbnailPath(string filePath)
+        public (string folderPath,string fileName) CreateThumbnailPath(string filePath)
         {
-            //TODO:サムネディレクトリの変更(頭2桁で分けたい)
             var ext = Path.GetExtension(filePath);
             var fileName = CalcMd5(filePath) + ext;
-            var retFilePath = this.thumbnailBaseDir + Path.DirectorySeparatorChar + fileName;
-            return retFilePath;
+            var folderPath = this.thumbnailBaseDir + Path.DirectorySeparatorChar　+ fileName.Substring(0,2) ;
+            return (folderPath, fileName);
         }
 
         private string CalcMd5(string srcStr)
