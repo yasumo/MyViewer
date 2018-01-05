@@ -20,7 +20,7 @@ namespace SlideShow.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         List<Folder> FolderList;
-
+        public ThumbnailWindow View { get; private set; } = null;
         private ListCollectionView imagePathListBox;
         public ListCollectionView ImagePathListBox
         {
@@ -40,6 +40,9 @@ namespace SlideShow.ViewModels
         public void Initialize(ThumbnailWindow thumbnailWindow,List<Folder> folderList)
         {
             FolderList = folderList;
+            View = thumbnailWindow;
+            View.WindowState = System.Windows.WindowState.Maximized;
+
 
             var fo = new FolderOperator();
             var imgFilePathList = fo.GetAllFilePathList(fo.GetFolderPathList(FolderList), SlideShowConst.PIC_EXT_LIST);
@@ -47,6 +50,8 @@ namespace SlideShow.ViewModels
             this.ImagePathList = new List<string>(imgFilePathList);
             //ObservableCollection
             this.ImagePathListBox = new ListCollectionView(new ObservableCollection<object>(this.ImagePathList));
+            //初期選択を選択無しにする
+            ImagePathListBox.MoveCurrentTo(-1);
             this.ImagePathListBox.CurrentChanged += ImagePathListBox_CurrentChanged;
         }
 

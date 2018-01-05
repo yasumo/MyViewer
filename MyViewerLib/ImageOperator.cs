@@ -59,7 +59,7 @@ namespace MyViewerLib
             Image orig = Image.FromFile(imageFilePath);
 
             // サムネイルの作成
-            var (width, height) = StrechSize(orig.Width, orig.Height, 100, 100);
+            var (width, height) = StrechSize(orig.Width, orig.Height, 150, 150);
             Image thumbnail = orig.GetThumbnailImage(
               width, height, delegate { return false; }, IntPtr.Zero);
             orig.Dispose();

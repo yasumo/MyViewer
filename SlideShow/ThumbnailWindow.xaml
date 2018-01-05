@@ -11,22 +11,29 @@
     <Window.Resources>
         <converter:ImageSizeConverter x:Key="imageSizeConverter" />
     </Window.Resources>
-    <Grid>
+    <Grid >
         <ListBox ItemsSource="{Binding ImagePathListBox}"
                  VirtualizingPanel.VirtualizationMode="Recycling"
                  VirtualizingPanel.IsVirtualizing="True"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.CanContentScroll="True"
                  ScrollViewer.PanningMode="VerticalOnly"
-                 ScrollViewer.IsDeferredScrollingEnabled="True">
+                 ScrollViewer.IsDeferredScrollingEnabled="True"
+                 Background="Gray"
+                 >
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Background" Value="LightGray" />
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate >
-                    <Image Source="{Binding Converter={StaticResource imageSizeConverter}}"/>
+                    <Image Source="{Binding Converter={StaticResource imageSizeConverter}}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <vwp:VirtualizingWrapPanel ItemHeight="100" ItemWidth="100"/>
+                    <vwp:VirtualizingWrapPanel ItemHeight="150" ItemWidth="150"/>
                     <!--VirtualizingStackPanel Orientation="Vertical" CanVerticallyScroll="True"/-->
                     <!--VirtualizingWrapPanel ItemHeight="100" ItemWidth="100" /-->
                 </ItemsPanelTemplate>
