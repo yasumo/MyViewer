@@ -45,7 +45,8 @@ namespace SlideShow.ViewModels
 
         public ICommand SlideShow { get; private set; }
         public ICommand Thumbnail { get; private set; }
-        public ICommand Search { get; private set; }
+        public ICommand FolderSearch { get; private set; }
+        public ICommand TagSearch { get; private set; }
         public ICommand CreateIndex { get; private set; }
 
         public void Initialize(MainWindow mainWindow)
@@ -53,7 +54,8 @@ namespace SlideShow.ViewModels
             View = mainWindow;
             SlideShow = new SimpleCommand(SlideShowMethod);
             Thumbnail = new SimpleCommand(ThumbnailMethod);
-            Search = new SimpleCommand(SearchMethod);
+            FolderSearch = new SimpleCommand(FolderSearchMethod);
+            TagSearch = new SimpleCommand(TagSearchMethod);
             CreateIndex = new SimpleCommand(CreateIndexMethod);
             SearchText = "";
             LogText = "";
@@ -71,7 +73,7 @@ namespace SlideShow.ViewModels
             win.ShowDialog();
         }
 
-        private void SearchMethod()
+        private void FolderSearchMethod()
         {
             using (var dao = new Dao(Settings.GetSqliteFilePath()))
             {
@@ -108,6 +110,37 @@ namespace SlideShow.ViewModels
             }
         }
 
+        private void TagSearchMethod()
+        {
+            using (var dao = new Dao(Settings.GetSqliteFilePath()))
+            {
+                LogText = "";
+                if (SearchText.Trim().Length == 0)
+                {
+                    //空の時はタグ名全部返す
+                    foreach (var tagAndNum in dao.GetAllTagAndNum())
+                    {
+                        LogText += tagAndNum.tagName + ":" + tagAndNum.tagNum + Environment.NewLine;
+                    }
+                }
+                else
+                {
+                    //値があるときはディレクトリを返す
+                    string[] delimiter = { "," };
+
+                    var tags = SearchText.Split(delimiter, StringSplitOptions.None);
+                    var tagList = new List<string>(tags.Distinct());
+                    SearchedFolderList = dao.GetFolderIdListHaving(tagList);
+                    var tmpText = "";
+                    //foreach (var tag in dao.GetOtherTag(tagList))
+                    foreach (var tag in dao.GetRelationTagList(tagList))
+                    {
+                        tmpText += tag.tagNum + "\t\t" + tag.tagName + Environment.NewLine;
+                    }
+                    LogText = tmpText;
+                }
+            }
+        }
 
 
         private void CreateIndexMethod()

@@ -27,5 +27,10 @@ namespace SlideShow
             ViewModel.Initialize(this);
             this.DataContext = ViewModel;
         }
+
+        private void TextBox_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+
+        }
     }
 }
