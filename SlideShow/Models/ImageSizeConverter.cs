@@ -28,8 +28,8 @@ namespace SlideShow.Models
             var image = new BitmapImage();
             image.BeginInit();
             image.UriSource = new Uri(absPath);
-            image.DecodePixelHeight = 100;
-            image.DecodePixelWidth = 100;
+            //image.DecodePixelHeight = 100;
+            //image.DecodePixelWidth = 100;
             image.EndInit();
             return image;
         }

@@ -59,12 +59,33 @@ namespace MyViewerLib
             Image orig = Image.FromFile(imageFilePath);
 
             // サムネイルの作成
-            //TODO:アス比固定縮小
+            var (width, height) = StrechSize(orig.Width, orig.Height, 100, 100);
             Image thumbnail = orig.GetThumbnailImage(
-              100, 100, delegate { return false; }, IntPtr.Zero);
+              width, height, delegate { return false; }, IntPtr.Zero);
             orig.Dispose();
-
             return thumbnail;
+
+        }
+
+        private (int width, int height) StrechSize(int width, int height,int resizeWidth, int resizeHeight)
+        {
+
+            int retWidth=0, retHeight = 0;
+            
+            if ((double)width / height < (double)resizeWidth / resizeHeight)
+            {
+                //クライアント領域の方が横長なら、縦方向はいっぱいに表示
+                retWidth = resizeHeight * width / height;
+                retHeight = resizeHeight;
+            }
+            else
+            {
+                //画像の方が横長なら、横方向はいっぱいに表示
+                retWidth = resizeWidth;
+                retHeight = resizeWidth * height / width;
+            }
+            return (retWidth, retHeight);
+
 
         }
 
