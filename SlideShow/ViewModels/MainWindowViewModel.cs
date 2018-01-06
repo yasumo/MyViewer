@@ -46,6 +46,7 @@ namespace SlideShow.ViewModels
         public ICommand SlideShow { get; private set; }
         public ICommand Thumbnail { get; private set; }
         public ICommand FolderSearch { get; private set; }
+        public ICommand TagRelationSearch { get; private set; }
         public ICommand TagSearch { get; private set; }
         public ICommand CreateIndex { get; private set; }
 
@@ -55,6 +56,7 @@ namespace SlideShow.ViewModels
             SlideShow = new SimpleCommand(SlideShowMethod);
             Thumbnail = new SimpleCommand(ThumbnailMethod);
             FolderSearch = new SimpleCommand(FolderSearchMethod);
+            TagRelationSearch = new SimpleCommand(TagRelationSearchMethod);
             TagSearch = new SimpleCommand(TagSearchMethod);
             CreateIndex = new SimpleCommand(CreateIndexMethod);
             SearchText = "";
@@ -83,7 +85,7 @@ namespace SlideShow.ViewModels
                     //空の時はタグ名全部返す
                     foreach (var tagAndNum in dao.GetAllTagAndNum())
                     {
-                        LogText += tagAndNum.tagName + ":" + tagAndNum.tagNum + Environment.NewLine;
+                        LogText += tagAndNum.TagName + ":" + tagAndNum.TagNum + Environment.NewLine;
                     }
                 }
                 else
@@ -110,7 +112,7 @@ namespace SlideShow.ViewModels
             }
         }
 
-        private void TagSearchMethod()
+        private void TagRelationSearchMethod()
         {
             using (var dao = new Dao(Settings.GetSqliteFilePath()))
             {
@@ -120,7 +122,7 @@ namespace SlideShow.ViewModels
                     //空の時はタグ名全部返す
                     foreach (var tagAndNum in dao.GetAllTagAndNum())
                     {
-                        LogText += tagAndNum.tagName + ":" + tagAndNum.tagNum + Environment.NewLine;
+                        LogText += tagAndNum.TagName + ":" + tagAndNum.TagNum + Environment.NewLine;
                     }
                 }
                 else
@@ -142,6 +144,36 @@ namespace SlideShow.ViewModels
             }
         }
 
+        private void TagSearchMethod()
+        {
+            using (var dao = new Dao(Settings.GetSqliteFilePath()))
+            {
+                LogText = "";
+                if (SearchText.Trim().Length == 0)
+                {
+                    //空の時はタグ名全部返す
+                    foreach (var tagAndNum in dao.GetAllTagAndNum())
+                    {
+                        LogText += tagAndNum.TagName + ":" + tagAndNum.TagNum + Environment.NewLine;
+                    }
+                }
+                else
+                {
+                    //値があるときはディレクトリを返す
+                    string[] delimiter = { "," };
+
+                    var tags = SearchText.Split(delimiter, StringSplitOptions.None);
+                    var tagList = new List<string>(tags.Distinct());
+                    SearchedFolderList = dao.GetFolderIdListHaving(tagList);
+                    var tmpText = "";
+                    foreach (var tag in dao.GetAllTag().Where(x=>tagList.Where(y=>x.TagName.Contains(y)).Count()>0))
+                    {
+                        tmpText += tag.TagName + Environment.NewLine;
+                    }
+                    LogText = tmpText;
+                }
+            }
+        }
 
         private void CreateIndexMethod()
         {

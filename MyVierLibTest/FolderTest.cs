@@ -22,7 +22,7 @@ namespace MyVierLibTest
         {
             var thumbnailDir = TestUtils.GetThumbDir();
             var count = FolderOperator.DeleteOldFiles(thumbnailDir, 3);
-            Assert.AreEqual(1, count);
+            Assert.AreEqual(2, count);
         }
 
         [TestMethod]

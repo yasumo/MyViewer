@@ -204,7 +204,7 @@ namespace MyViewerLib
         }
 
         //すべてのタグと、それに紐付くファイル数を取得
-        public List<(Int64 tagId, string tagName, long tagNum)> GetAllTagAndNum()
+        public List<(Int64 TagId, string TagName, long TagNum)> GetAllTagAndNum()
         {
             var ret = new List<(Int64 tagId,string tagName, long tagNum)>();
             Table<Tag> tagTable = dc.GetTable<Tag>();
@@ -227,10 +227,10 @@ namespace MyViewerLib
 
             foreach (var x in groupby)
             {
-                var tagId = x.TagId;
-                var tagName = x.TagName.ToString();
-                var tagNum = x.Sum.GetValueOrDefault(0L);
-                ret.Add((tagId, tagName, tagNum));
+                var TagId = x.TagId;
+                var TagName = x.TagName.ToString();
+                var TagNum = x.Sum.GetValueOrDefault(0L);
+                ret.Add((TagId, TagName, TagNum));
             }
 
             return ret;
